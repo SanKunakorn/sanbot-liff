@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
-  <title>San Bot Liff</title>
+  <title>San BOT</title>
   <style>
   </style>
   <link rel="stylesheet" href="styles.css">
@@ -26,6 +26,8 @@
     <div class="flex">
       <button id="btnLogin" onclick="liff.login()">Log In</button>
       <button id="btnLogOut" onclick="logOut()">Log Out</button>
+
+      <button id="btnLogOut" onclick="settext()">เช็ค</button>
     </div>
 
     <select id="pageSelector" onchange="goToSelectedPage()">
@@ -37,11 +39,11 @@
     <div class="input-box">
       <form id="mainform">
         <div id="display_error" style="color: red"></div>
-        <label class="col-sm-2 control-label" for="datetime">วันที่:</label>
-        <input type="date" class="form-control" id="datetime">
+        <label for="datetime">วันที่:</label>
+        <input type="date" id="datetime">
         <!--================================================ผู้ปฏิบัติ===============================================-->
-        <label for="user" class="col-sm-2 control-label">ผู้ปฏิบัติ:</label>
-        <input list="userlist" class="form-control" id="user">
+        <label for="user">ผู้ปฏิบัติ:</label>
+        <input list="userlist" id="user">
         <datalist id="userlist">
           <option value="ชุดสืบสวน">
           <option value="พัฒนา">
@@ -50,10 +52,10 @@
         </datalist>
         <!--==================================================ช่องรายละเอียด============================================-->
         <label for="deail">รายละเอียด:</label>
-        <textarea class="form-control" id="detail" cols="100" rows="5"></textarea>
+        <textarea id="detail" cols="100" rows="5"></textarea>
         <!--=============================================ช่องพิกัด=====================================================-->
         <label for="latlong">พิกัด:</label>
-        <input type="text" class="form-control" id="latlong">
+        <input type="text" id="latlong">
       </form>
 
       <!--=================================================ปุ่มบันทึก================================================-->
@@ -64,24 +66,30 @@
     </div>
   </div>
 
-
-
   <script>
-
-
-    var data = {}
-    data.user = document.getElementById("user").value
-    data.datetime = document.getElementById("datetime").value
-    data.detail = document.getElementById("detail").value
-    data.latlong = document.getElementById("latlong").value
-    var message = 'เรียน ผู้บังคับบัญชา' + "\n-------------------------" + '\n     วันนี้( ' + data.datetime + ' )' + "\n" + data.user + ' ' + data.detail + "\n แผนที่: https://maps.google.com?q=" + data.latlong + '\n   ' + "     จึงเรียนมาเพื่อโปรดทราบ"
-
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("btnsend").addEventListener("click", sendMessage)
       document.getElementById("btnShare").addEventListener("click", sendShare)
-
     });
 
+    function settext() {
+      let user = document.getElementById("user").value;
+      let datetimeInput = document.getElementById("datetime");
+      let datetime = datetimeInput.value ? new Date(datetimeInput.value) : new Date(); // Check if datetime input is empty, if yes, use current date
+      let detail = document.getElementById("detail").value;
+      let latlong = document.getElementById("latlong").value;
+      // Options for Thai locale
+      let options = { year: 'numeric', month: 'short', day: 'numeric' };
+      // Convert the date to Thai locale
+      let thaiDate = datetime.toLocaleDateString('th-TH', options);
+
+      let message = 'เรียน ผู้บังคับบัญชา' + "\n-------------------------" + '\n     วันนี้( ' + thaiDate + ' )' + "\n" + user + ' ' + detail + "\n แผนที่: https://maps.google.com?q=" + latlong + '\n   ' + "     จึงเรียนมาเพื่อโปรดทราบ";
+
+      alert(`${message}`)
+
+
+      return message;
+    }
 
     // Function to navigate to selected page
     function goToSelectedPage() {
@@ -111,12 +119,16 @@
 
     async function sendShare() {
 
-    /*var detail = document.getElementById('detail').value;
-      var datetime = document.getElementById('datetime').value;
-      var user = document.getElementById('user').value;
-      var latlong = document.getElementById('latlong').value;
-      var message = 'เรียน ผู้บังคับบัญชา\n     วันนี้(' + datetime + ')\n' + user + ' ' + detail + '\n' + latlong;
-      */
+      /*var detail = document.getElementById('detail').value;
+        var datetime = document.getElementById('datetime').value;
+        var user = document.getElementById('user').value;
+        var latlong = document.getElementById('latlong').value;
+        var message = 'เรียน ผู้บังคับบัญชา\n     วันนี้(' + datetime + ')\n' + user + ' ' + detail + '\n' + latlong;
+        */
+
+      var message = await settext();
+
+
       const result = await liff.shareTargetPicker([
         {
           type: "text",
@@ -146,13 +158,13 @@
 
     async function sendMessage() {
 
-     /* var detail = document.getElementById('detail').value;
-      var datetime = document.getElementById('datetime').value;
-      var user = document.getElementById('user').value;
-      var latlong = document.getElementById('latlong').value;
-      var message = 'เรียน ผู้บังคับบัญชา\n     วันนี้(' + datetime + ')\n' + user + ' ' + detail + '\n' + latlong;
-      */
-      
+      /* var detail = document.getElementById('detail').value;
+       var datetime = document.getElementById('datetime').value;
+       var user = document.getElementById('user').value;
+       var latlong = document.getElementById('latlong').value;
+       var message = 'เรียน ผู้บังคับบัญชา\n     วันนี้(' + datetime + ')\n' + user + ' ' + detail + '\n' + latlong;
+       */
+      var message = await settext();
       try {
         // เรียกใช้ LIFF API เพื่อส่งข้อความ
         await liff.sendMessages([
