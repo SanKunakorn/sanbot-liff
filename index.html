@@ -1,43 +1,109 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
   <title>My LIFF App</title>
+  
+  
   <style>
-    body { padding: 256px }
-    button { display: none; width: 50%; padding: 16px 0; margin: 16px auto }
+  /*
+    body {
+      padding: 256px
+    }
+
+    button {
+      display: none;
+      width: 50%;
+      padding: 16px 0;
+      margin: 16px auto
+    } */
   </style>
+ 
 </head>
+
 <body>
-  <button id="btnShare" onclick="sendShare()">Share Target Picker</button>
+  <button id="btnShare" onclick="sendMessage()">Share Target Picker</button>
   <button id="btnLogin" onclick="liff.login()">Log In</button>
   <button id="btnLogOut" onclick="logOut()">Log Out</button>
 
-  <img id="pictureUrl" src="" width="100">
 
-  <!-- <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script> -->
+  <select id="pageSelector" onchange="goToSelectedPage()">
+    <option value="page1">Page 1</option>
+    <option value="page2">Page 2</option>
+    <option value="page3">San APP</option>
+  </select>
+  <script>
+    // Function to navigate to selected page
+    function goToSelectedPage() {
+      // Get the selected page value
+      var selectedPage = document.getElementById("pageSelector").value;
+      // Determine the URL based on the selected page value
+      switch (selectedPage) {
+        case "page1":
+          document.getElementById("tel").style.display = "block";
+          break;
+        case "page2":
+          document.getElementById("tel").style.display = "none";
+          break;
+        case "page3":
+          window.location.href = 'https://san-all.web.app';
+          break;
+        default:
+          document.getElementById("tel").style.display = "block";
+          break;
+      }
+    }
+  </script>
+  <img id="pictureUrl" src="" width="100">
+  <p id="userId"></p>
+  <p id="displayName"></p>
+  <p id="statusMessage"></p>
+
+  <script>
+    async function getUserProfile() {
+      const profile = await liff.getProfile()
+      const body = document.getElementById("body")
+      const pictureUrl = document.getElementById("pictureUrl")
+      const userId = document.getlementById("userId")
+      const displayName = documment.getElementById("displayName")
+      const btnShare = document.getElementById("btnShare")
+      const statusMessage = document.getElementById("statusMessage")
+      pictureUrl.src = profile.pictureUrl
+      userId.innerHTML = "<b>userId:</b>" + profile.userId
+      displayName.innerHTML = "<b>displayName:</b>" + profile.displayName
+      statusMessage.innerHTML = "<b>statusMessage:</b>" + profile.statusMessage
+    }
+  </script>
+
+
+  <div class="input-box" id="tel">
+    <form id="formtel">
+      <input type="text" id="messageInput" placeholder="Enter your message">
+      <form>
+  </div>
 
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
 
-
   <script>
- async function sendShare() {
+    async function sendShare() {
 
-        // เรียกใช้ LIFF API เพื่อเรียก Share Target Picker
-        const result = await liff.shareTargetPicker([
-            {
-                type: "text",
-                text: "ข้อความที่คุณต้องการแชร์" // ข้อความที่ต้องการแชร์
-            },
-            {
-                type: "sticker",
-                packageId: "รหัสของแพ็คเกจสติกเกอร์",
-                stickerId: "รหัสของสติกเกอร์" // รหัสของสติกเกอร์ที่ต้องการแชร์
-            }
-            // สามารถเพิ่มประเภทอื่น ๆ และข้อมูลเพิ่มเติมตามต้องการ
-        ])
-        
+      // เรียกใช้ LIFF API เพื่อเรียก Share Target Picker
+
+      const result = await liff.shareTargetPicker([
+        {
+          type: "text",
+          text: "ข้อความที่คุณต้องการแชร์" // ข้อความที่ต้องการแชร์
+        },
+        {
+          type: "sticker",
+          packageId: "รหัสของแพ็คเกจสติกเกอร์",
+          stickerId: "รหัสของสติกเกอร์" // รหัสของสติกเกอร์ที่ต้องการแชร์
+        }
+        // สามารถเพิ่มประเภทอื่น ๆ และข้อมูลเพิ่มเติมตามต้องการ
+      ])
+
       if (result) {
         alert(`[${result.status}] Message sent!`)
       } else {
@@ -53,8 +119,26 @@
         }
       }
     }
-  
 
+
+    async function sendMessage() {
+    try {
+        // เรียกใช้ LIFF API เพื่อส่งข้อความ
+        var message=document.getElementById('messageInput').value;
+
+        await liff.sendMessages([
+            {
+                type: 'text',
+                text: message, // ข้อความที่ต้องการส่ง
+            }
+            // สามารถเพิ่มประเภทของข้อความและข้อมูลเพิ่มเติมตามต้องการ
+        ]);
+
+        console.log("Message sent successfully!");
+    } catch (error) {
+        console.error("Error occurred while trying to send message:", error);
+    }
+}
 
     function logOut() {
       liff.logout()
@@ -62,20 +146,11 @@
     }
 
 
-  async function getUserProfile(){
-  const profile = await liff.getProfile()
-  pictureUrl.src = profile.pictureUrl
-  userId.innerHTML ="<b>userId:</b>"+ profile.userId
-  displayName.innerHTML ="<b>displayName:</b>"+profile.displayName
-  statusMessage.innerHTML= "<b>statusMessage:</b>" + profile.statusMessage
-  }
-
-
-
 
     async function main() {
       await liff.init({ liffId: "2004593216-XbA9wj26" })
       if (liff.isLoggedIn()) {
+        getUserProfile()
         document.getElementById("btnShare").style.display = "block"
         if (!liff.isInClient()) {
           document.getElementById("btnLogOut").style.display = "block"
@@ -87,4 +162,5 @@
     main()
   </script>
 </body>
+
 </html>
