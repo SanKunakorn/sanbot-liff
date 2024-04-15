@@ -6,31 +6,45 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
   <title>San Bot Liff</title>
   <style>
-
-
-
-
   </style>
+  <link rel="stylesheet" href="styles.css">
 
 </head>
 
-<body>
-  <img id="pictureUrl" width="100" height="100">
-  <p id="userId"></p>
-  <p id="displayName"></p>
-  <p id="statusMessage"></p>
+<body id="body">
+<div id="wrapper">
 
+<div id="profile">
+    <img id="pictureUrl" width="100" height="100">
+    <p id="userId"></p>
+    <p id="displayName"></p>
+    <p id="statusMessage"></p>
+</div>
 
-  <button id="btnShare" onclick="sendShare()">แชร์</button>
-  <button id="btnShare" onclick="sendMessage()">ส่งข้อความ</button>
-  <button id="btnLogin" onclick="getUserProfile() ">Log In</button>
-  <button id="btnLogOut" onclick="logOut()">Log Out</button>
+    <div class="input-box" id="bt"></div>
+    <button id="btnShare" onclick="sendShare()">แชร์</button>
+    <button id="btnShare" onclick="sendMessage()">ส่งข้อความ</button>
+    <button id="btnLogin" onclick="loff.login()">Log In</button>
+    <button id="btnLogOut" onclick="logOut()">Log Out</button>
+  </div>
 
+  <div class="input-box" id="selectpage"></div>
   <select id="pageSelector" onchange="goToSelectedPage()">
     <option value="page1">Page 1</option>
     <option value="page2">Page 2</option>
     <option value="page3">San APP</option>
   </select>
+  </div>
+
+  <div class="input-box" id="tel">
+    <form id="formtel">
+      <input type="text" id="messageInput" placeholder="Enter your message">
+      <form>
+  </div>
+
+  </div>
+
+
   <script>
     // Function to navigate to selected page
     function goToSelectedPage() {
@@ -54,11 +68,7 @@
     }
   </script>
 
-  <div class="input-box" id="tel">
-    <form id="formtel">
-      <input type="text" id="messageInput" placeholder="Enter your message">
-      <form>
-  </div>
+
 
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
 
@@ -115,33 +125,45 @@
       window.location.reload()
     }
 
-        async function getUserProfile() {
-            liff.login()
-            try {
-                const profile = await liff.getProfile();
-                const pictureUrl = document.getElementById("pictureUrl");
-                const userId = document.getElementById("userId");
-                const displayName = document.getElementById("displayName");
-                const statusMessage = document.getElementById("statusMessage");
+    async function getUserProfile() {
+      liff.login()
+      try {
+        const profile = await liff.getProfile();
+        const pictureUrl = document.getElementById("pictureUrl");
+        const userId = document.getElementById("userId");
+        const displayName = document.getElementById("displayName");
+        const statusMessage = document.getElementById("statusMessage");
 
-                pictureUrl.src = profile.pictureUrl;
-                userId.innerHTML = "<b>userId:</b> " + profile.userId;
-                displayName.innerHTML = "<b>displayName:</b> " + profile.displayName;
-                statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
-            } catch (error) {
-                console.error("Error occurred while trying to get user profile:", error);
-            }
-        }
+        pictureUrl.src = profile.pictureUrl;
+        userId.innerHTML = "<b>userId:</b> " + profile.userId;
+        displayName.innerHTML = "<b>displayName:</b> " + profile.displayName;
+        statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
+      } catch (error) {
+        console.error("Error occurred while trying to get user profile:", error);
+      }
+    }
 
     async function main() {
+
+      liff.ready.then(() => {
+        if (liff.getOS() === "android") {
+          body.style.backgroundColor = "#88888"
+        }
+        if (liff.isInClient()) {
+          getUserProfile()
+        }
+      })
+
       await liff.init({ liffId: "2004593216-XbA9wj26" })
       if (liff.isLoggedIn()) {
+
         document.getElementById("btnShare").style.display = "block"
         if (!liff.isInClient()) {
           document.getElementById("btnLogOut").style.display = "block"
         }
       } else {
         document.getElementById("btnLogin").style.display = "block"
+        liff.login()
       }
     }
     main()
