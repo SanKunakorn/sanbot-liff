@@ -126,7 +126,6 @@
     }
 
     async function getUserProfile() {
-      liff.login()
       try {
         const profile = await liff.getProfile();
         const pictureUrl = document.getElementById("pictureUrl");
