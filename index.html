@@ -14,7 +14,7 @@
 
 </head>
 
-<body id="body">
+<body>
   <img id="pictureUrl" width="100" height="100">
   <p id="userId"></p>
   <p id="displayName"></p>
@@ -23,7 +23,7 @@
 
   <button id="btnShare" onclick="sendShare()">แชร์</button>
   <button id="btnShare" onclick="sendMessage()">ส่งข้อความ</button>
-  <button id="btnLogin" onclick="liff.login()">Log In</button>
+  <button id="btnLogin" onclick="getUserProfile() ">Log In</button>
   <button id="btnLogOut" onclick="logOut()">Log Out</button>
 
   <select id="pageSelector" onchange="goToSelectedPage()">
@@ -116,6 +116,7 @@
     }
 
         async function getUserProfile() {
+            liff.login()
             try {
                 const profile = await liff.getProfile();
                 const pictureUrl = document.getElementById("pictureUrl");
@@ -132,9 +133,6 @@
             }
         }
 
-        // เรียกใช้ฟังก์ชัน getUserProfile เมื่อโหลดหน้าเว็บ
-        getUserProfile();
-
     async function main() {
       await liff.init({ liffId: "2004593216-XbA9wj26" })
       if (liff.isLoggedIn()) {
@@ -147,7 +145,6 @@
       }
     }
     main()
-    getUserProfile()
   </script>
 </body>
 
