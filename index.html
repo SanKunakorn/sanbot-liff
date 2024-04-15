@@ -4,21 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
-  <title>My LIFF App</title>
-
-
+  <title>San Bot Liff</title>
   <style>
-    /*
-    body {
-      padding: 256px
-    }
 
-    button {
-      display: none;
-      width: 50%;
-      padding: 16px 0;
-      margin: 16px auto
-    } */
+
+
+
   </style>
 
 </head>
@@ -30,7 +21,8 @@
   <p id="statusMessage"></p>
 
 
-  <button id="btnShare" onclick="sendShare()">Share</button>
+  <button id="btnShare" onclick="sendShare()">แชร์</button>
+  <button id="btnShare" onclick="sendMessage()">ส่งข้อความ</button>
   <button id="btnLogin" onclick="liff.login()">Log In</button>
   <button id="btnLogOut" onclick="logOut()">Log Out</button>
 
@@ -61,27 +53,6 @@
       }
     }
   </script>
-
-  <script>
-    const profile = await liff.getProfile()
-    async function getUserProfile() {
-            try {
-                const profile = await liff.getProfile();
-                const pictureUrl = document.getElementById("pictureUrl");
-                const userId = document.getElementById("userId");
-                const displayName = document.getElementById("displayName");
-                const statusMessage = document.getElementById("statusMessage");
-
-                pictureUrl.src = profile.pictureUrl;
-                userId.innerHTML = "<b>userId:</b> " + profile.userId;
-                displayName.innerHTML = "<b>displayName:</b> " + profile.displayName;
-                statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
-            } catch (error) {
-                console.error("Error occurred while trying to get user profile:", error);
-            }
-        }
-  </script>
-
 
   <div class="input-box" id="tel">
     <form id="formtel">
@@ -144,10 +115,29 @@
       window.location.reload()
     }
 
+        async function getUserProfile() {
+            try {
+                const profile = await liff.getProfile();
+                const pictureUrl = document.getElementById("pictureUrl");
+                const userId = document.getElementById("userId");
+                const displayName = document.getElementById("displayName");
+                const statusMessage = document.getElementById("statusMessage");
+
+                pictureUrl.src = profile.pictureUrl;
+                userId.innerHTML = "<b>userId:</b> " + profile.userId;
+                displayName.innerHTML = "<b>displayName:</b> " + profile.displayName;
+                statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
+            } catch (error) {
+                console.error("Error occurred while trying to get user profile:", error);
+            }
+        }
+
+        // เรียกใช้ฟังก์ชัน getUserProfile เมื่อโหลดหน้าเว็บ
+        getUserProfile();
+
     async function main() {
       await liff.init({ liffId: "2004593216-XbA9wj26" })
       if (liff.isLoggedIn()) {
-        getUserProfile()
         document.getElementById("btnShare").style.display = "block"
         if (!liff.isInClient()) {
           document.getElementById("btnLogOut").style.display = "block"
@@ -157,6 +147,7 @@
       }
     }
     main()
+    getUserProfile()
   </script>
 </body>
 
