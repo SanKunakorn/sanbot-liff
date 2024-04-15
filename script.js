@@ -1,4 +1,8 @@
 
+
+
+
+
 getLocation()
     let lat, lon
     function getLocation() {

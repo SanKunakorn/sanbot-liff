@@ -9,27 +9,26 @@
   </style>
   <link rel="stylesheet" href="styles.css">
   <script src="script.js"></script>
-
 </head>
 
 <body id="body">
-  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
-
-
-
 
   <div class="wrapper">
+
+
     <img id="pictureUrl" width="100" height="100">
     <p id="userId"></p>
     <p id="displayName"></p>
     <p id="statusMessage"></p>
 
-    <button id="btnLogin" onclick="loff.login()">Log In</button>
-    <button id="btnLogOut" onclick="logOut()">Log Out</button>
+
+    <button id="btnLogin" onclick="liff.login()">Log In</button>
+    <button id="btnLogOut"onclick="logOut">Log Out</button>
+
 
   <select id="pageSelector" onchange="goToSelectedPage()">
     <option value="page1">ตรวจที่เกิดเหตุ</option>
-    <option value="page2">Page 2</option>
+    <option value="page2">กำลังปรับปรุง</option>
     <option value="page3">San APP</option>
   </select>
 
@@ -56,14 +55,25 @@
       </form>
 
       <!--=================================================ปุ่มบันทึก================================================-->
-      <button id="btnsend" onclick="sendMessage()">ส่งข้อความ</button>
-      <button id="btnShare" onclick="sendShare()">แชร์</button>
+      
+      <button id="btnsend">ส่งข้อความ</button>
+      <button id="btnShare">แชร์</button>
+
   </div>
+
   </div>
-
-
-
   <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    
+    document.getElementById("btnsend").addEventListener("click", sendMessage)
+    document.getElementById("btnShare").addEventListener("click", sendShare)
+
+  });
+
+  
+
+  
+
     // Function to navigate to selected page
     function goToSelectedPage() {
       // Get the selected page value
@@ -86,6 +96,8 @@
     }
   </script>
 
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+
   <script>
   var detail = document.getElementById('detail').value;
   var datetime = document.getElementById('datetime').value;
@@ -104,6 +116,8 @@
 
       if (result) {
         alert(`[${result.status}] Message sent!`)
+        document.getElementById("mainform").reset()
+
       } else {
         const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split('.');
 
@@ -132,9 +146,10 @@
           // สามารถเพิ่มประเภทของข้อความและข้อมูลเพิ่มเติมตามต้องการ
         ]);
 
-        console.log("Message sent successfully!");
+        alert("Message sent successfully!");
+        document.getElementById("mainform").reset()
       } catch (error) {
-        console.error("Error occurred while trying to send message:", error);
+        alert("Error occurred while trying to send message:", error);
       }
     }
 
@@ -177,12 +192,13 @@
           document.getElementById("btnLogOut").style.display = "block"
         }
       } else {
-        liff.login()
+        //liff.login()
         document.getElementById("btnLogin").style.display = "block"
       }
     }
     main()
   </script>
+
 </body>
 
 </html>

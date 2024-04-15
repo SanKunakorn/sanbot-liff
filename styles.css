@@ -13,6 +13,7 @@
     align-items: center;
     min-height: 100vh;
     background: rgba(36, 67, 75, 0.747);
+    padding: 20px;
   }
 
   .wrapper {
@@ -61,7 +62,7 @@
     border: 2px solid rgba(255, 255, 255, .2);
     border-radius: 20px; /* ทำให้มีขอบโค้ง */
     font-size: 16px;
-    color: #fff;
+    color: #ce0808;
     padding: 20px 45px 20px 20px;
     resize: none;
     line-height: 24px;
