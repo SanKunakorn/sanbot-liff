@@ -13,6 +13,10 @@
 </head>
 
 <body id="body">
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+
+
+
 
   <div class="wrapper">
     <img id="pictureUrl" width="100" height="100">
@@ -20,7 +24,6 @@
     <p id="displayName"></p>
     <p id="statusMessage"></p>
 
-    <button id="btnShare" onclick="sendShare()">แชร์</button>
     <button id="btnLogin" onclick="loff.login()">Log In</button>
     <button id="btnLogOut" onclick="logOut()">Log Out</button>
 
@@ -54,6 +57,7 @@
 
       <!--=================================================ปุ่มบันทึก================================================-->
       <button id="btnsend" onclick="sendMessage()">ส่งข้อความ</button>
+      <button id="btnShare" onclick="sendShare()">แชร์</button>
   </div>
   </div>
 
@@ -82,16 +86,14 @@
     }
   </script>
 
-  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
-
   <script>
   var detail = document.getElementById('detail').value;
   var datetime = document.getElementById('datetime').value;
-  var userlist = document.getElementById('userlist').value;
+  var user = document.getElementById('user').value;
   var latlong = document.getElementById('latlong').value;
 
     async function sendShare() {
-      var message='เรียน ผู้บังคับบัญชา\n     วันนี้('+datatime+')\n'+userlist+' '+detail+'\n'+latlong
+      var message='เรียน ผู้บังคับบัญชา\n     วันนี้('+datatime+')\n'+user+' '+detail+'\n'+latlong;
       const result = await liff.shareTargetPicker([
         {
           type: "text",
@@ -120,7 +122,7 @@
     async function sendMessage() {
       try {
         // เรียกใช้ LIFF API เพื่อส่งข้อความ
-        var message='เรียน ผู้บังคับบัญชา\n     วันนี้('+datatime+')\n'+userlist+' '+detail+'\n'+latlong
+        var message='เรียน ผู้บังคับบัญชา\n     วันนี้('+datatime+')\n'+user+' '+detail+'\n'+latlong;
 
         await liff.sendMessages([
           {
@@ -149,9 +151,9 @@
         const displayName = document.getElementById("displayName");
         const statusMessage = document.getElementById("statusMessage");
         pictureUrl.src = profile.pictureUrl;
-        userId.innerHTML = "<b>userId:</b> " + profile.userId;
-        displayName.innerHTML = "<b>displayName:</b> " + profile.displayName;
-        statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
+        //userId.innerHTML = "<b>userId:</b> " + profile.userId;
+        displayName.innerHTML = "<b>Name:</b> " + profile.displayName;
+        //statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
       } catch (error) {
         console.error("Error occurred while trying to get user profile:", error);
       }
@@ -175,7 +177,7 @@
           document.getElementById("btnLogOut").style.display = "block"
         }
       } else {
-        //liff.login()
+        liff.login()
         document.getElementById("btnLogin").style.display = "block"
       }
     }
