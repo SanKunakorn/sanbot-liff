@@ -17,8 +17,8 @@
   }
 
   .wrapper {
-    width: 80%hv;
-    height: 90%hv;
+    width: 90vh;
+    height: 100vh;
     background: rgba(0, 0, 0, 0.3);
     /* Adjust the alpha value for transparency */
     border: 2px solid rgba(255, 255, 255, 0.2);
@@ -82,9 +82,6 @@
     border: none;
     cursor: pointer;
   }
-
-
-
 
 
 
