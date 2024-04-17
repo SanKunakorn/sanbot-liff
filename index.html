@@ -14,7 +14,6 @@
 <body id="body">
 
   <div class="wrapper">
-
     <img id="pictureUrl" width="100" height="100">
     <p id="userId"></p>
     <h1>
@@ -22,11 +21,9 @@
     </h1>
     <p id="statusMessage"></p>
 
-
     <div class="flex">
       <button id="btnLogin" onclick="liff.login()">Log In</button>
       <button id="btnLogOut" onclick="logOut()">Log Out</button>
-
       <button id="btnLogOut" onclick="settext()">เช็ค</button>
     </div>
 
@@ -61,15 +58,20 @@
       <!--=================================================ปุ่มบันทึก================================================-->
 
       <button id="btnsend">ส่งข้อความ</button>
+      <button id="btnflex">ส่ง Flex</button>
       <button id="btnShare">แชร์</button>
-
     </div>
   </div>
+  <div>
+    <p>พัฒนาโดย San K.</p>
+  </div>
+
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("btnsend").addEventListener("click", sendMessage)
       document.getElementById("btnShare").addEventListener("click", sendShare)
+      document.getElementById("btnflex").addEventListener("click", sendFlex)
     });
 
     function settext() {
@@ -181,6 +183,140 @@
         alert("Error occurred while trying to send message:", error);
       }
     }
+
+
+    async function sendFlex() {
+      //var message = await settext();
+      try {
+        // เรียกใช้ LIFF API เพื่อส่งข้อความ
+        await liff.sendMessages([
+          {
+            "type": "flex",
+            "altText": "ผลการตรวจสอบ",
+            "contents": {
+
+              "type": "bubble",
+              "header": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ผลการค้นหา",
+                    "weight": "bold",
+                    "size": "xl",
+                    "align": "center"
+                  },
+                  {
+                    "type": "box",
+                    "layout": "baseline",
+                    "spacing": "sm",
+                    "contents": [
+                      {
+                        "type": "icon",
+                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                      },
+                      {
+                        "type": "text",
+                        "text": "User Message",
+                        "wrap": true,
+                        "color": "#666666",
+                        "size": "sm",
+                        "flex": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "margin": "lg",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "box",
+                    "layout": "baseline",
+                    "spacing": "sm",
+                    "contents": [
+                      {
+                        "type": "text",
+                        "text": "Results",
+                        "color": "#aaaaaa",
+                        "size": "sm",
+                        "flex": 1
+                      },
+                      {
+                        "type": "text",
+                        "text": "ผลการค้นหา",
+                        "wrap": true,
+                        "color": "#666666",
+                        "size": "sm",
+                        "flex": 5
+                      }
+                    ]
+                  },
+                  {
+                    "type": "separator"
+                  }
+                ]
+              },
+              "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "button",
+                    "style": "secondary",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "Line",
+                      "uri": "https://linecorp.com"
+                    },
+                    "color": "#00FF66"
+                  },
+                  {
+                    "type": "button",
+                    "style": "link",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "WEBSITE",
+                      "uri": "https://linecorp.com"
+                    }
+                  },
+                  {
+                    "type": "separator"
+                  },
+                  {
+                    "type": "text",
+                    "text": "SAN BOT —> San K.",
+                    "align": "end"
+                  }
+                ],
+                "flex": 0
+              },
+              "styles": {
+                "header": {
+                  "backgroundColor": "#99FFFF"
+                }
+              }
+            }
+          }
+        ]);
+
+
+        alert("Message sent successfully!");
+        document.getElementById("mainform").reset()
+      } catch (error) {
+        alert("Error occurred while trying to send message:", error);
+      }
+    }
+
+
+
 
     function logOut() {
       liff.logout()
