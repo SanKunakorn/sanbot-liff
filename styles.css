@@ -26,16 +26,17 @@ header {
   text-align: center;
   padding: 10px;
   bottom: 0;
-  min-width: 95vh;
+  min-width: 95vw;
   border-radius: 20px;
 }
 
 main{
-  padding: 5px;  
+  padding: 5px;
+  min-width: 95vw;  
 }
 
 section {
-  width: 95vh;
+  min-width: 95vw;
   background: rgba(61, 104, 97, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(9px) brightness(70%);
@@ -115,7 +116,7 @@ footer {
   text-align: center;
   padding: 10px;
   bottom: 0;
-  width: 95vh;
+  min-width: 95vw;
   border-radius: 20px;
 }
 

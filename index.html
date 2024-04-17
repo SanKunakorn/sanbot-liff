@@ -64,7 +64,6 @@
       <button id="btnsend">ส่งข้อความ</button>
       <button id="btnflex">ส่ง Flex</button>
       <button id="btnShare">แชร์</button>
-
     </section>
 
   </main>
@@ -195,6 +194,10 @@
 
     async function sendFlex() {
       //var message = await settext();
+       var detail = document.getElementById('detail').value;
+       var datetime = document.getElementById('datetime').value;
+       var user = document.getElementById('user').value;
+       var latlong = document.getElementById('latlong').value;
       try {
         // เรียกใช้ LIFF API เพื่อส่งข้อความ
         await liff.sendMessages([
@@ -226,7 +229,7 @@
                       },
                       {
                         "type": "text",
-                        "text": "User Message",
+                        "text": user,
                         "wrap": true,
                         "color": "#666666",
                         "size": "sm",
@@ -256,7 +259,7 @@
                       },
                       {
                         "type": "text",
-                        "text": "ผลการค้นหา",//ผล
+                        "text": detail,//ผล
                         "wrap": true,
                         "color": "#666666",
                         "size": "sm",
