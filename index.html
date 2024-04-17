@@ -13,27 +13,32 @@
 
 <body id="body">
 
-  <div class="wrapper">
-    <img id="pictureUrl" width="100" height="100">
-    <p id="userId"></p>
-    <h1>
-      <p id="displayName"></p>
-    </h1>
-    <p id="statusMessage"></p>
-
-    <div class="flex">
+  <header>
+    <div class="column">
+      <img id="pictureUrl" width="100" height="100">
+    </div>
+    <div class="column">
+      <p id="userId"></p>
+      <h1>
+        <p id="displayName"></p>
+      </h1>
+      <p id="statusMessage"></p>
+    </div>
+  </header>
+  <main>
+    <section>
+      <select id="pageSelector" onchange="goToSelectedPage()">
+        <option value="page1">ตรวจที่เกิดเหตุ</option>
+        <option value="page2">กำลังปรับปรุง</option>
+        <option value="page3">San APP</option>
+      </select>
       <button id="btnLogin" onclick="liff.login()">Log In</button>
       <button id="btnLogOut" onclick="logOut()">Log Out</button>
       <button id="btnLogOut" onclick="settext()">เช็ค</button>
-    </div>
+    </section>
 
-    <select id="pageSelector" onchange="goToSelectedPage()">
-      <option value="page1">ตรวจที่เกิดเหตุ</option>
-      <option value="page2">กำลังปรับปรุง</option>
-      <option value="page3">San APP</option>
-    </select>
-
-    <div class="input-box">
+    <section id="textbox">
+      <div class="input-box">
       <form id="mainform">
         <div id="display_error" style="color: red"></div>
         <label for="datetime">วันที่:</label>
@@ -54,17 +59,20 @@
         <label for="latlong">พิกัด:</label>
         <input type="text" id="latlong">
       </form>
-
-      <!--=================================================ปุ่มบันทึก================================================-->
+      </div>
 
       <button id="btnsend">ส่งข้อความ</button>
       <button id="btnflex">ส่ง Flex</button>
       <button id="btnShare">แชร์</button>
-    </div>
-  </div>
-  <div>
-    <p>พัฒนาโดย San K.</p>
-  </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <h2>พัฒนาโดย San Kunakorn <br> งานสืบสวน สภ.นิคมพัฒนา ภ.จว.ระยอง</h2>
+  </footer>
+
 
 
   <script>
@@ -100,10 +108,10 @@
       // Determine the URL based on the selected page value
       switch (selectedPage) {
         case "page1":
-          document.getElementById("mainform").style.display = "block";
+          document.getElementById("textbox").style.display = "block";
           break;
         case "page2":
-          document.getElementById("mainform").style.display = "none";
+          document.getElementById("textbox").style.display = "none";
           break;
         case "page3":
           window.location.href = 'https://san-all.web.app';
@@ -248,7 +256,7 @@
                       },
                       {
                         "type": "text",
-                        "text": "ผลการค้นหา",
+                        "text": "ผลการค้นหา",//ผล
                         "wrap": true,
                         "color": "#666666",
                         "size": "sm",
@@ -268,23 +276,12 @@
                 "contents": [
                   {
                     "type": "button",
-                    "style": "secondary",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "Line",
-                      "uri": "https://linecorp.com"
-                    },
-                    "color": "#00FF66"
-                  },
-                  {
-                    "type": "button",
                     "style": "link",
                     "height": "sm",
                     "action": {
                       "type": "uri",
-                      "label": "WEBSITE",
-                      "uri": "https://linecorp.com"
+                      "label": "แผนที่",
+                      "uri": "https://maps.google.com?q=" + latlong,
                     }
                   },
                   {
@@ -294,7 +291,18 @@
                     "type": "text",
                     "text": "SAN BOT —> San K.",
                     "align": "end"
-                  }
+                  },
+                  {
+                    "type": "button",
+                    "style": "secondary",
+                    "height": "sm",
+                    "action": {
+                      "type": "uri",
+                      "label": "Line",
+                      "uri": "http://line.me/ti/p/~@223zypdp"
+                    },
+                    "color": "#00FF66"
+                  },
                 ],
                 "flex": 0
               },
@@ -332,7 +340,7 @@
         const statusMessage = document.getElementById("statusMessage");
         pictureUrl.src = profile.pictureUrl;
         //userId.innerHTML = "<b>userId:</b> " + profile.userId;
-        displayName.innerHTML = "<b>Name:</b> " + profile.displayName;
+        displayName.innerHTML = profile.displayName + " <b>Login</b> ";
         //statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
       } catch (error) {
         console.error("Error occurred while trying to get user profile:", error);
