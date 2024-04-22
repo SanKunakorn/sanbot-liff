@@ -66,7 +66,6 @@
         </form>
       </div>
       <button id="btnsend">ส่งข้อความ</button>
-      <button id="btnflex">ส่ง Flex</button>
       <button id="btnShare">แชร์</button>
     </section>
 
@@ -75,23 +74,20 @@
         <label for="txtip">Keywords</label>
         <input type="text" id="txtip">
       </div>
-      <button id="btnip">ตรวจสอบ</button>
-    </section>
+     </section>
 
+      <button id="btnip">ตรวจสอบ</button>
+   
   </main>
 
   <footer>
     <h2>พัฒนาโดย San Kunakorn <br> งานสืบสวน สภ.นิคมพัฒนา ภ.จว.ระยอง</h2>
   </footer>
 
-
-
   <script>
-
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("btnsend").addEventListener("click", sendMessage)
       document.getElementById("btnShare").addEventListener("click", sendShare)
-      document.getElementById("btnflex").addEventListener("click", sendFlex)
     });
 
     function settext() {
@@ -124,7 +120,6 @@
         case "botip":
           document.getElementById("formreport").style.display = "none";
           document.getElementById("formip").style.display = "block";
-
           document.getElementById("btnip").addEventListener("click",function(){
             CheckIP()
           });
@@ -237,6 +232,7 @@
       }
     }
     main()
+    goToSelectedPage()
   </script>
 
 </body>
