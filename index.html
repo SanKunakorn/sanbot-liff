@@ -18,18 +18,23 @@
       <img id="pictureUrl" width="100" height="100">
     </div>
     <div class="column">
-      <p id="userId"></p>
       <h1>
         <p id="displayName"></p>
+        <p id="ipinfo"></p>
       </h1>
+      <p id="userId"></p>
       <p id="statusMessage"></p>
+
+
+
     </div>
+
   </header>
   <main>
     <section>
       <select id="pageSelector" onchange="goToSelectedPage()">
-        <option value="page1">ตรวจที่เกิดเหตุ</option>
-        <option value="page2">กำลังปรับปรุง</option>
+        <option value="index">ตรวจที่เกิดเหตุ</option>
+        <option value="botip">เช็ค IP Address</option>
         <option value="page3">San APP</option>
       </select>
       <button id="btnLogin" onclick="liff.login()">Log In</button>
@@ -37,33 +42,40 @@
       <button id="btnLogOut" onclick="settext()">เช็ค</button>
     </section>
 
-    <section id="textbox">
+    <section id="formreport">
       <div class="input-box">
-      <form id="mainform">
-        <div id="display_error" style="color: red"></div>
-        <label for="datetime">วันที่:</label>
-        <input type="date" id="datetime">
-        <!--================================================ผู้ปฏิบัติ===============================================-->
-        <label for="user">ผู้ปฏิบัติ:</label>
-        <input list="userlist" id="user">
-        <datalist id="userlist">
-          <option value="ชุดสืบสวน">
-          <option value="พัฒนา">
-          <option value="สายตรวจเขต">
-          <option value="สายตรวจตู้ยาม">
-        </datalist>
-        <!--==================================================ช่องรายละเอียด============================================-->
-        <label for="deail">รายละเอียด:</label>
-        <textarea id="detail" cols="100" rows="5"></textarea>
-        <!--=============================================ช่องพิกัด=====================================================-->
-        <label for="latlong">พิกัด:</label>
-        <input type="text" id="latlong">
-      </form>
+        <form id="mainform">
+          <div id="display_error" style="color: red"></div>
+          <label for="datetime">วันที่:</label>
+          <input type="date" id="datetime">
+          <!--================================================ผู้ปฏิบัติ===============================================-->
+          <label for="user">ผู้ปฏิบัติ:</label>
+          <input list="userlist" id="user">
+          <datalist id="userlist">
+            <option value="ชุดสืบสวน">
+            <option value="พัฒนา">
+            <option value="สายตรวจเขต">
+            <option value="สายตรวจตู้ยาม">
+          </datalist>
+          <!--==================================================ช่องรายละเอียด============================================-->
+          <label for="deail">รายละเอียด:</label>
+          <textarea id="detail" cols="100" rows="5"></textarea>
+          <!--=============================================ช่องพิกัด=====================================================-->
+          <label for="latlong">พิกัด:</label>
+          <input type="text" id="latlong">
+        </form>
       </div>
-
       <button id="btnsend">ส่งข้อความ</button>
       <button id="btnflex">ส่ง Flex</button>
       <button id="btnShare">แชร์</button>
+    </section>
+
+    <section id="formip">
+      <div class="input-box">
+        <label for="txtip">Keywords</label>
+        <input type="text" id="txtip">
+      </div>
+      <button id="btnip">ตรวจสอบ</button>
     </section>
 
   </main>
@@ -75,6 +87,7 @@
 
 
   <script>
+
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("btnsend").addEventListener("click", sendMessage)
       document.getElementById("btnShare").addEventListener("click", sendShare)
@@ -91,32 +104,40 @@
       let options = { year: 'numeric', month: 'short', day: 'numeric' };
       // Convert the date to Thai locale
       let thaiDate = datetime.toLocaleDateString('th-TH', options);
-
       let message = 'เรียน ผู้บังคับบัญชา' + "\n-------------------------" + '\n     วันนี้( ' + thaiDate + ' )' + "\n" + user + ' ' + detail + "\n แผนที่: https://maps.google.com?q=" + latlong + '\n   ' + "     จึงเรียนมาเพื่อโปรดทราบ";
-
       alert(`${message}`)
-
-
       return message;
     }
 
-    // Function to navigate to selected page
+
+
+    //ตั้งค่าการแสดงผล
     function goToSelectedPage() {
-      // Get the selected page value
+      //เลือกหน้า
       var selectedPage = document.getElementById("pageSelector").value;
-      // Determine the URL based on the selected page value
       switch (selectedPage) {
-        case "page1":
-          document.getElementById("textbox").style.display = "block";
+        case "index":
+          document.getElementById("formip").style.display = "none";
+          document.getElementById("formreport").style.display = "block";
           break;
-        case "page2":
-          document.getElementById("textbox").style.display = "none";
+
+        case "botip":
+          document.getElementById("formreport").style.display = "none";
+          document.getElementById("formip").style.display = "block";
+
+          document.getElementById("btnip").addEventListener("click",function(){
+            CheckIP()
+          });
           break;
+
+
         case "page3":
           window.location.href = 'https://san-all.web.app';
           break;
+
         default:
-          document.getElementById("tel").style.display = "block";
+          document.getElementById("formip").style.display = "none";
+          document.getElementById("formreport").style.display = "block";
           break;
       }
     }
@@ -127,23 +148,12 @@
   <script>
 
     async function sendShare() {
-
-      /*var detail = document.getElementById('detail').value;
-        var datetime = document.getElementById('datetime').value;
-        var user = document.getElementById('user').value;
-        var latlong = document.getElementById('latlong').value;
-        var message = 'เรียน ผู้บังคับบัญชา\n     วันนี้(' + datetime + ')\n' + user + ' ' + detail + '\n' + latlong;
-        */
-
       var message = await settext();
-
-
       const result = await liff.shareTargetPicker([
         {
           type: "text",
           text: message,// ข้อความที่ต้องการแชร์
         },
-        // สามารถเพิ่มประเภทอื่น ๆ และข้อมูลเพิ่มเติมตามต้องการ
       ])
 
       if (result) {
@@ -166,13 +176,6 @@
 
 
     async function sendMessage() {
-
-      /* var detail = document.getElementById('detail').value;
-       var datetime = document.getElementById('datetime').value;
-       var user = document.getElementById('user').value;
-       var latlong = document.getElementById('latlong').value;
-       var message = 'เรียน ผู้บังคับบัญชา\n     วันนี้(' + datetime + ')\n' + user + ' ' + detail + '\n' + latlong;
-       */
       var message = await settext();
       try {
         // เรียกใช้ LIFF API เพื่อส่งข้อความ
@@ -191,144 +194,6 @@
       }
     }
 
-
-    async function sendFlex() {
-      //var message = await settext();
-       var detail = document.getElementById('detail').value;
-       var datetime = document.getElementById('datetime').value;
-       var user = document.getElementById('user').value;
-       var latlong = document.getElementById('latlong').value;
-      try {
-        // เรียกใช้ LIFF API เพื่อส่งข้อความ
-        await liff.sendMessages([
-          {
-            "type": "flex",
-            "altText": "ผลการตรวจสอบ",
-            "contents": {
-
-              "type": "bubble",
-              "header": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "ผลการค้นหา",
-                    "weight": "bold",
-                    "size": "xl",
-                    "align": "center"
-                  },
-                  {
-                    "type": "box",
-                    "layout": "baseline",
-                    "spacing": "sm",
-                    "contents": [
-                      {
-                        "type": "icon",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-                      },
-                      {
-                        "type": "text",
-                        "text": user,
-                        "wrap": true,
-                        "color": "#666666",
-                        "size": "sm",
-                        "flex": 5
-                      }
-                    ]
-                  }
-                ]
-              },
-              "body": {
-                "type": "box",
-                "layout": "vertical",
-                "margin": "lg",
-                "spacing": "sm",
-                "contents": [
-                  {
-                    "type": "box",
-                    "layout": "baseline",
-                    "spacing": "sm",
-                    "contents": [
-                      {
-                        "type": "text",
-                        "text": "Results",
-                        "color": "#aaaaaa",
-                        "size": "sm",
-                        "flex": 1
-                      },
-                      {
-                        "type": "text",
-                        "text": detail,//ผล
-                        "wrap": true,
-                        "color": "#666666",
-                        "size": "sm",
-                        "flex": 5
-                      }
-                    ]
-                  },
-                  {
-                    "type": "separator"
-                  }
-                ]
-              },
-              "footer": {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "sm",
-                "contents": [
-                  {
-                    "type": "button",
-                    "style": "link",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "แผนที่",
-                      "uri": "https://maps.google.com?q=" + latlong,
-                    }
-                  },
-                  {
-                    "type": "separator"
-                  },
-                  {
-                    "type": "text",
-                    "text": "SAN BOT —> San K.",
-                    "align": "end"
-                  },
-                  {
-                    "type": "button",
-                    "style": "secondary",
-                    "height": "sm",
-                    "action": {
-                      "type": "uri",
-                      "label": "Line",
-                      "uri": "http://line.me/ti/p/~@223zypdp"
-                    },
-                    "color": "#00FF66"
-                  },
-                ],
-                "flex": 0
-              },
-              "styles": {
-                "header": {
-                  "backgroundColor": "#99FFFF"
-                }
-              }
-            }
-          }
-        ]);
-
-
-        alert("Message sent successfully!");
-        document.getElementById("mainform").reset()
-      } catch (error) {
-        alert("Error occurred while trying to send message:", error);
-      }
-    }
-
-
-
-
     function logOut() {
       liff.logout()
       window.location.reload()
@@ -342,8 +207,8 @@
         const displayName = document.getElementById("displayName");
         const statusMessage = document.getElementById("statusMessage");
         pictureUrl.src = profile.pictureUrl;
-        //userId.innerHTML = "<b>userId:</b> " + profile.userId;
-        displayName.innerHTML = profile.displayName + " <b>Login</b> ";
+        userId.innerHTML = "<b>userId:</b> " + profile.userId;
+        displayName.innerHTML = profile.displayName;
         //statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
       } catch (error) {
         console.error("Error occurred while trying to get user profile:", error);
