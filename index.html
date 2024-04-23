@@ -24,39 +24,44 @@
       </h1>
       <p id="userId"></p>
       <p id="statusMessage"></p>
-
-
-
     </div>
 
   </header>
   <main>
     <section>
-      <select id="pageSelector" onchange="goToSelectedPage()">
-        <option value="index">ตรวจที่เกิดเหตุ</option>
-        <option value="botip">เช็ค IP Address</option>
-        <option value="page3">San APP</option>
-      </select>
-      <button id="btnLogin" onclick="liff.login()">Log In</button>
-      <button id="btnLogOut" onclick="logOut()">Log Out</button>
-      <button id="btnLogOut" onclick="settext()">เช็ค</button>
+      <div class="column">
+        <select id="pageSelector" onchange="goToSelectedPage()">
+          <option value="index">ตรวจที่เกิดเหตุ</option>
+          <option value="botip">เช็ค IP Address</option>
+          <option value="page3">San APP</option>
+        </select>
+      </div>
+      <div class="column">
+        <button id="btnLogin" onclick="liff.login()">Log In</button>
+        <button id="btnLogOut" onclick="logOut()">Log Out</button>
+        <button id="btnLogOut" onclick="settext()">เช็ค</button>
+      </div>
+
     </section>
 
     <section id="formreport">
       <div class="input-box">
         <form id="mainform">
-          <div id="display_error" style="color: red"></div>
-          <label for="datetime">วันที่:</label>
-          <input type="date" id="datetime">
-          <!--================================================ผู้ปฏิบัติ===============================================-->
-          <label for="user">ผู้ปฏิบัติ:</label>
-          <input list="userlist" id="user">
-          <datalist id="userlist">
-            <option value="ชุดสืบสวน">
-            <option value="พัฒนา">
-            <option value="สายตรวจเขต">
-            <option value="สายตรวจตู้ยาม">
-          </datalist>
+
+          <div class="column">
+            <label for="datetime">วันที่</label>
+            <input type="date" id="datetime">
+            <!--================================================ผู้ปฏิบัติ===============================================-->
+            <label for="user">ผู้ปฏิบัติ</label>
+            <input list="userlist" id="user">
+            <datalist id="userlist">
+              <option value="ชุดสืบสวน">
+              <option value="พัฒนา">
+              <option value="สายตรวจเขต">
+              <option value="สายตรวจตู้ยาม">
+            </datalist>
+          </div>
+
           <!--==================================================ช่องรายละเอียด============================================-->
           <label for="deail">รายละเอียด:</label>
           <textarea id="detail" cols="100" rows="5"></textarea>
@@ -65,8 +70,10 @@
           <input type="text" id="latlong">
         </form>
       </div>
-      <button id="btnsend">ส่งข้อความ</button>
-      <button id="btnShare">แชร์</button>
+      <div class="column">
+        <button id="btnsend">ส่งข้อความ</button>
+        <button id="btnShare">แชร์</button>
+      </div>
     </section>
 
     <section id="formip">
@@ -74,10 +81,11 @@
         <label for="txtip">Keywords</label>
         <input type="text" id="txtip">
       </div>
-     </section>
-
       <button id="btnip">ตรวจสอบ</button>
-   
+    </section>
+
+
+
   </main>
 
   <footer>
@@ -120,7 +128,7 @@
         case "botip":
           document.getElementById("formreport").style.display = "none";
           document.getElementById("formip").style.display = "block";
-          document.getElementById("btnip").addEventListener("click",function(){
+          document.getElementById("btnip").addEventListener("click", function () {
             CheckIP()
           });
           break;
@@ -202,7 +210,7 @@
         const displayName = document.getElementById("displayName");
         const statusMessage = document.getElementById("statusMessage");
         pictureUrl.src = profile.pictureUrl;
-        userId.innerHTML = "<b>userId:</b> " + profile.userId;
+        userId.innerHTML = profile.userId;
         displayName.innerHTML = profile.displayName;
         //statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
       } catch (error) {

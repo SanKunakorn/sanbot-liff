@@ -63,6 +63,14 @@ section .input-box {
   padding: 10px 10px 10px 10px;
 }
 
+.column{
+  width: 90vw;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  
+}
+
 #pageSelector {
   width: 100%;
   height: 100%;

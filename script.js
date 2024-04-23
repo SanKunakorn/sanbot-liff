@@ -31,7 +31,7 @@ function getLocation() {
           "\n📍https://maps.google.com?q=" + data.lat + "," + data.lon
         ;
         alert(`${ipResult}`);
-       await sendFlexBot(`${txtip},${ipResult}`)
+        sendMessagebot(ipResult);
       } else {
         alert('Error: ' + response.status);
       }
@@ -39,6 +39,31 @@ function getLocation() {
       alert('Error occurred: ' + error);
     }
   }
+
+
+
+  async function sendMessagebot(message) {
+    
+    try {
+      // เรียกใช้ LIFF API เพื่อส่งข้อความ
+      await liff.sendMessages([
+        {
+          type: 'text',
+          text: message, // ข้อความที่ต้องการส่ง
+        }
+        // สามารถเพิ่มประเภทของข้อความและข้อมูลเพิ่มเติมตามต้องการ
+      ]);
+
+      alert("Message sent successfully!");
+      document.getElementById("mainform").reset()
+    } catch (error) {
+      alert("Error occurred while trying to send message:", error);
+    }
+  }
+
+
+
+
   
   async function sendFlexBot(key, results) {
     try {
