@@ -14,10 +14,10 @@
 <body id="body">
 
   <header>
-    <div class="column">
+    <div class="row">
       <img id="pictureUrl" width="100" height="100">
     </div>
-    <div class="column">
+    <div class="row">
       <h1>
         <p id="displayName"></p>
         <p id="ipinfo"></p>
@@ -29,31 +29,25 @@
   </header>
   <main>
     <section>
-      <div class="column">
-        <select id="pageSelector" onchange="goToSelectedPage()">
+      <div class="row">
+        <select id="selector" onchange="goToSelectedPage()">
           <option value="index">ตรวจที่เกิดเหตุ</option>
           <option value="botip">เช็ค IP Address</option>
           <option value="page3">San APP</option>
         </select>
       </div>
-      <div class="column">
+      <div class="row">
         <button id="btnLogin" onclick="liff.login()">Log In</button>
         <button id="btnLogOut" onclick="logOut()">Log Out</button>
-        <button id="btnLogOut" onclick="settext()">เช็ค</button>
       </div>
-
     </section>
 
     <section id="formreport">
       <div class="input-box">
         <form id="mainform">
-
-          <div class="column">
-            <label for="datetime">วันที่</label>
+          <div class="row">
             <input type="date" id="datetime">
-            <!--================================================ผู้ปฏิบัติ===============================================-->
-            <label for="user">ผู้ปฏิบัติ</label>
-            <input list="userlist" id="user">
+            <input list="userlist" id="user" placeholder="เลือกผู้ปฏิบัติงาน">
             <datalist id="userlist">
               <option value="ชุดสืบสวน">
               <option value="พัฒนา">
@@ -61,6 +55,7 @@
               <option value="สายตรวจตู้ยาม">
             </datalist>
           </div>
+
 
           <!--==================================================ช่องรายละเอียด============================================-->
           <label for="deail">รายละเอียด:</label>
@@ -70,7 +65,8 @@
           <input type="text" id="latlong">
         </form>
       </div>
-      <div class="column">
+      <div class="row">
+        <button id="btnsettext" onclick="settext()">แสดงตัวอย่าง</button>
         <button id="btnsend">ส่งข้อความ</button>
         <button id="btnShare">แชร์</button>
       </div>
@@ -78,10 +74,12 @@
 
     <section id="formip">
       <div class="input-box">
-        <label for="txtip">Keywords</label>
-        <input type="text" id="txtip">
+        <input type="text" id="txtkey" placeholder="Keywords | คำค้นหา">
       </div>
-      <button id="btnip">ตรวจสอบ</button>
+      <div class="row">
+        <button id="btnbotcheck">ตรวจสอบ</button>
+        <button id="btnbotsend">ส่งข้อความ</button>
+      </div>
     </section>
 
 
@@ -114,11 +112,10 @@
     }
 
 
-
+    
     //ตั้งค่าการแสดงผล
     function goToSelectedPage() {
-      //เลือกหน้า
-      var selectedPage = document.getElementById("pageSelector").value;
+      var selectedPage = document.getElementById("selector").value;
       switch (selectedPage) {
         case "index":
           document.getElementById("formip").style.display = "none";
@@ -128,9 +125,10 @@
         case "botip":
           document.getElementById("formreport").style.display = "none";
           document.getElementById("formip").style.display = "block";
-          document.getElementById("btnip").addEventListener("click", function () {
-            CheckIP()
+          document.getElementById("btnbotcheck").addEventListener("click", function() {
+            getIpLocation()
           });
+
           break;
 
 
@@ -189,7 +187,25 @@
           }
           // สามารถเพิ่มประเภทของข้อความและข้อมูลเพิ่มเติมตามต้องการ
         ]);
+        alert("Message sent successfully!");
+        document.getElementById("mainform").reset()
+      } catch (error) {
+        alert("Error occurred while trying to send message:", error);
+      }
+    }
 
+
+    async function sendMessagebot() {
+      var message = await CheckIP()
+      try {
+        // เรียกใช้ LIFF API เพื่อส่งข้อความ
+        await liff.sendMessages([
+          {
+            type: 'text',
+            text: message, // ข้อความที่ต้องการส่ง
+          }
+          // สามารถเพิ่มประเภทของข้อความและข้อมูลเพิ่มเติมตามต้องการ
+        ]);
         alert("Message sent successfully!");
         document.getElementById("mainform").reset()
       } catch (error) {
