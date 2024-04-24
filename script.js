@@ -12,19 +12,22 @@ function getLocation() {
   }
 }
 
-function getIpLocation() {
-  var ip = document.getElementById('txtkey').value
-  fetch(`http://ip-api.com/json/${ip}`)
+async function getIpLocation() {
+var ip = document.getElementById('txtkey').value
+ await fetch(`http://ip-api.com/json/${ip}`)
     .then(response => response.json())
     .then(data => {
-      // ส่งข้อความไปยังแชทของผู้ใช้
-      var message = "\n📍ประเทศ: " + data.country + ": " + data.countryCode +
-        "\n📍พื้นที่: " + data.region + ":" + data.regionName +
-        "\n📍เมือง: " + data.city +
-        "\n📍Timezone: " + data.timezone +
-        "\n📍ผู้ให้บริการ: " + data.isp +
-        "\n📍Org: " + data.org + "\n📍As: " + data.as +
-        "\n📍https://maps.google.com?q=" + data.lat + "," + data.lon;
+      var message = 
+      `IP Address: ${data.query}
+        \n📍ประเทศ: ${data.country} : ${data.countryCode}
+        \n📍พื้นที่: ${data.region} : ${data.regionName}
+        \n📍เมือง: ${data.city}
+        \n📍Timezone: ${data.timezone}
+        \n📍ผู้ให้บริการ: ${data.isp}
+        \n📍Org: ${data.org}
+        \n📍As: ${data.as}
+        \n📍https://maps.google.com?q=${data.lat},${data.lon}`
+      alert(message);
 
       liff.sendMessages([
         {
@@ -34,6 +37,7 @@ function getIpLocation() {
       ])
         .then(() => {
           alert('Message sent');
+          
         })
         .catch((err) => {
           alert('Error sending message:', err);
