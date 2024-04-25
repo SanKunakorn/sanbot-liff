@@ -14,7 +14,7 @@ function getLocation() {
 
 async function getIpLocation() {
 var ip = document.getElementById('txtkey').value
- await fetch(`http://ip-api.com/json/${ip}`)
+fetch(`http://ip-api.com/json/${ip}`)
     .then(response => response.json())
     .then(data => {
       var message = 

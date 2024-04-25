@@ -20,7 +20,6 @@
     <div class="colomn">
       <h1>
         <p id="displayName"></p>
-        <p id="ipinfo"></p>
       </h1>
       <p id="userId"></p>
       <p id="statusMessage"></p>
@@ -69,7 +68,7 @@
       </div>
     </section>
 
-     <!--=============================== รายงานปักหมุด =======================-->
+    <!--=============================== รายงานปักหมุด =======================-->
     <section id="formbot">
       <div class="input-box">
         <input type="text" id="txtkey" placeholder="Keywords | คำค้นหา">
@@ -110,7 +109,7 @@
     }
 
 
-    
+
     //ตั้งค่าการแสดงผล
     function goToSelectedPage() {
       var selectedPage = document.getElementById("selector").value;
@@ -123,7 +122,7 @@
         case "botip":
           document.getElementById("formreport").style.display = "none";
           document.getElementById("formbot").style.display = "block";
-          document.getElementById("btnbotcheck").addEventListener("click", function() {
+          document.getElementById("btnbotcheck").addEventListener("click", function () {
             getIpLocation()
           });
 
@@ -181,7 +180,7 @@
         await liff.sendMessages([
           {
             type: 'text',
-            text: message, // ข้อความที่ต้องการส่ง
+            text: message
           }
           // สามารถเพิ่มประเภทของข้อความและข้อมูลเพิ่มเติมตามต้องการ
         ]);
@@ -194,7 +193,6 @@
 
 
     async function sendMessagebot() {
-      var message = await CheckIP()
       try {
         // เรียกใช้ LIFF API เพื่อส่งข้อความ
         await liff.sendMessages([
@@ -224,8 +222,8 @@
         const displayName = document.getElementById("displayName");
         const statusMessage = document.getElementById("statusMessage");
         pictureUrl.src = profile.pictureUrl;
-        userId.innerHTML = profile.userId;
         displayName.innerHTML = profile.displayName;
+        //userId.innerHTML = profile.userId;
         //statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
       } catch (error) {
         console.error("Error occurred while trying to get user profile:", error);
@@ -252,9 +250,17 @@
         //liff.login()
         document.getElementById("btnLogin").style.display = "block"
       }
+
+      //กำหนดค่าเริ่มต้น
+      var today = new Date();
+      // รับค่าวันที่และเวลาในรูปแบบ ISO (YYYY-MM-DD)
+      var isoDate = today.toISOString().split('T')[0];
+      // กำหนดค่าเริ่มต้นให้กับ input
+      document.getElementById('datetime').value = isoDate;
+      goToSelectedPage()
     }
     main()
-    goToSelectedPage()
+
   </script>
 
 </body>
