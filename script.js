@@ -13,41 +13,38 @@ function getLocation() {
 }
 
 async function getIpLocation() {
-var ip = document.getElementById('txtkey').value
-fetch(`http://ip-api.com/json/${ip}`)
-    .then(response => response.json())
-    .then(data => {
-      var message = 
-      `IP Address: ${data.query}
-        \n📍ประเทศ: ${data.country} : ${data.countryCode}
-        \n📍พื้นที่: ${data.region} : ${data.regionName}
-        \n📍เมือง: ${data.city}
-        \n📍Timezone: ${data.timezone}
-        \n📍ผู้ให้บริการ: ${data.isp}
-        \n📍Org: ${data.org}
-        \n📍As: ${data.as}
-        \n📍https://maps.google.com?q=${data.lat},${data.lon}`
-      alert(message);
+  var ip = document.getElementById('txtkey').value;
+  try {
+    const response = await fetch(`http://ip-api.com/json/${ip}`);
+    const data = await response.json();
 
-      liff.sendMessages([
-        {
-          type: 'text',
-          text: message,
-        }
-      ])
-        .then(() => {
-          alert('Message sent');
-          
-        })
-        .catch((err) => {
-          alert('Error sending message:', err);
-        });
-    })
-    .catch(error => {
-      alert('Error:', error);
-    });
+    var message =
+    `IP Address: ${data.query}
+    📍ประเทศ: ${data.country} : ${data.countryCode}
+    📍พื้นที่: ${data.region} : ${data.regionName}
+    📍เมือง: ${data.city}
+    📍Timezone: ${data.timezone}
+    📍ผู้ให้บริการ: ${data.isp}
+    📍Org: ${data.org}
+    📍As: ${data.as}
+    📍https://maps.google.com?q=${data.lat},${data.lon}`;
+
+    alert(message);
+    return message; // Returning the message is optional
+  } catch (error) {
+    console.error('Error fetching IP location:', error);
+    alert('Error fetching IP location. Please try again.'); // Inform the user about the error
+    throw error; // Re-throw the error to handle it upstream if needed
+  }
 }
 
+
+
+async function sendflexip() {
+  var ip = document.getElementById('txtkey').value
+  let message = await getIpLocation();
+  sendFlexBot(ip, message)
+}
 
 
 async function sendFlexBot(key, results) {
