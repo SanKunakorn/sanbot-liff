@@ -65,7 +65,7 @@ section .input-box {
   border-radius: 10px;
   font-size: 16px;
   color: #1c1e21; /* สีข้อความใกล้เคียงกับ Facebook */
-  padding: 10px;
+  padding: 10px 10px 10px 10px;
   margin-bottom: 10px;
 }
 
