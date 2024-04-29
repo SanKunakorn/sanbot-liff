@@ -39,15 +39,8 @@ async function getIpLocation() {
 }
 
 
-
-async function sendflexip() {
-  var ip = document.getElementById('txtkey').value
-  let message = await getIpLocation();
-  sendFlexBot(ip, message)
-}
-
-
-async function sendFlexBot(key, results) {
+async function sendFlexBot() {
+  var ip = await getIpLocation();
   try {
     // เรียกใช้ LIFF API เพื่อส่งข้อความ
     await liff.sendMessages([
@@ -79,7 +72,7 @@ async function sendFlexBot(key, results) {
                   },
                   {
                     "type": "text",
-                    "text": key,
+                    "text": 'ผลการค้น Key',
                     "wrap": true,
                     "color": "#666666",
                     "size": "sm",
@@ -109,7 +102,7 @@ async function sendFlexBot(key, results) {
                   },
                   {
                     "type": "text",
-                    "text": results,//ผล
+                    "text": ip,//ผล
                     "wrap": true,
                     "color": "#666666",
                     "size": "sm",
