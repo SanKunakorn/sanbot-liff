@@ -12,12 +12,12 @@ function getLocation() {
   }
 }
 
+
 async function getIpLocation() {
   var ip = document.getElementById('txtkey').value;
   try {
     const response = await fetch(`http://ip-api.com/json/${ip}`);
     const data = await response.json();
-
     var message =
       `IP Address: ${data.query}
     📍ประเทศ: ${data.country} : ${data.countryCode}
@@ -28,22 +28,17 @@ async function getIpLocation() {
     📍Org: ${data.org}
     📍As: ${data.as}
     📍https://maps.google.com?q=${data.lat},${data.lon}`;
-
     alert(message);
-    return message; // Returning the message is optional
+    return message;
   } catch (error) {
     console.error('Error fetching IP location:', error);
-    alert('Error fetching IP location. Please try again.'); // Inform the user about the error
-    throw error; // Re-throw the error to handle it upstream if needed
+    throw error;
   }
 }
 
-
-
 async function sendFlexBot() {
   try {
-    var ip = await getIpLocation(); // เรียกใช้ getIpLocation() และรอให้ค่าส่งกลับมา
-    // สร้าง Flex Message โดยใช้ค่า ip ที่ได้จาก getIpLocation()
+    var ip = await getIpLocation();
     var flexMessage = {
       "type": "flex",
       "altText": "ระบบตอบกลับ",
@@ -129,7 +124,7 @@ async function sendFlexBot() {
               "action": {
                 "type": "uri",
                 "label": "San BOT",
-                "uri": "http://line.me/ti/p/~@223zypdp"
+                "uri": "http://line.me/ti/p/~@223zypdp",
               },
               "color": "#00FF66"
             },
@@ -143,14 +138,18 @@ async function sendFlexBot() {
         }
       }
     }
-
-    // เรียกใช้ LIFF API เพื่อส่งข้อความ Flex Message
-    await liff.sendMessages([flexMessage]);
-
-    alert("Message sent successfully!");
-    document.getElementById("txtip").reset();
+    alert(ip);
+    //ส่ง Flex
+    liff.sendMessages([flexMessage])
+      .then(() => {
+        liff.closeWindow();
+      })
+      .catch((err) => {
+        console.error('Error sending message:', err);
+      });
   } catch (error) {
-    alert("Error occurred while trying to send message: " + error);
+    console.error('Error occurred:', error);
   }
 }
+
 

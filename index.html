@@ -11,18 +11,19 @@
   <script src="script.js"></script>
 </head>
 
-  <header>
-    <div class="circle">
-      <img id="pictureUrl" style="width:100%;">
-    </div>
-    <div class="row">
-      <h1>
-        <p id="displayName"></p>
-      </h1>
-      <p id="userId"></p>
-      <p id="statusMessage"></p>
-    </div>
-  </header>
+<header>
+  <div class="circle">
+    <img id="pictureUrl" style="width:100%;">
+  </div>
+  <div class="row">
+    <h1>
+      <p id="displayName"></p>
+    </h1>
+    <p id="userId"></p>
+    <p id="statusMessage"></p>
+  </div>
+</header>
+
 <body id="body">
 
   <main>
@@ -74,12 +75,9 @@
       </div>
       <div class="row">
         <button id="btnbotcheck">ตรวจสอบ</button>
-        <button id="btnbotsend" onclick="sendFlexBot()">ส่งข้อความ</button>
+        <button id="btnbotsend">ส่งข้อความ</button>
       </div>
     </section>
-
-
-
   </main>
 
   <footer>
@@ -124,9 +122,10 @@
           document.getElementById("btnbotcheck").addEventListener("click", function () {
             getIpLocation()
           });
-
+          document.getElementById("btnbotsend").addEventListener("click", function () {
+            sendFlexBot()
+          });
           break;
-
 
         case "page3":
           window.location.href = 'https://san-all.web.app';
@@ -249,6 +248,7 @@
         //liff.login()
         document.getElementById("btnLogin").style.display = "block"
       }
+
 
       //กำหนดค่าเริ่มต้น
       var today = new Date();
