@@ -19,12 +19,20 @@ body {
 }
 
 h1 {
-  font-size: 30px;
+  font-size: 40px;
   text-align: center;
   color: #1877f2; /* สีข้อความใกล้เคียงกับ Facebook */
   font-weight: 600;
-  margin-bottom: 20px;
+  margin: 20px;
 }
+h3 {
+  font-size: 16px;
+  text-align: center;
+  color: #636b75; /* สีข้อความใกล้เคียงกับ Facebook */
+  font-weight: 600;
+  margin: 20px;
+}
+
 
 header {
   display: flex;
@@ -107,7 +115,7 @@ footer {
 footer h3 {
   font-size: 16px;
   text-align: center;
-  color: #1c1e21; /* สีข้อความใกล้เคียงกับ Facebook */
+  color: #1c1e21; /*สีข้อความใกล้เคียงกับ Facebook*/
   font-weight: 600;
 }
 

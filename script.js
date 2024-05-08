@@ -37,8 +37,8 @@ async function getIpLocation() {
 }
 
 async function sendFlexBot() {
+  var ip = await getIpLocation();
   try {
-    var ip = await getIpLocation();
     var flexMessage = {
       "type": "flex",
       "altText": "ระบบตอบกลับ",
@@ -140,7 +140,7 @@ async function sendFlexBot() {
     }
     alert(ip);
     //ส่ง Flex
-    liff.sendMessages([flexMessage])
+    await liff.sendMessages([flexMessage])
       .then(() => {
         liff.closeWindow();
       })

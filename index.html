@@ -19,8 +19,10 @@
     <h1>
       <p id="displayName"></p>
     </h1>
-    <p id="userId"></p>
-    <p id="statusMessage"></p>
+    <h3>
+      <p id="userId"></p>
+      <p id="statusMessage"></p>
+    </h3>
   </div>
 </header>
 
@@ -50,7 +52,7 @@
             <input list="userlist" id="user" placeholder="เลือกผู้ปฏิบัติงาน">
             <datalist id="userlist">
               <option value="ชุดสืบสวน">
-              <option value="พัฒนา">
+              <option value="ร้อยเวร 20">
               <option value="สายตรวจเขต">
               <option value="สายตรวจตู้ยาม">
             </datalist>
@@ -86,8 +88,12 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("btnsend").addEventListener("click", sendMessage)
-      document.getElementById("btnShare").addEventListener("click", sendShare)
+      document.getElementById("btnsend").addEventListener("click", function () {
+        sendMessagebot(settext());
+      });
+      document.getElementById("btnShare").addEventListener("click", function () {
+        shareMessage(settext());
+      });
     });
 
     function settext() {
@@ -142,16 +148,13 @@
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
 
   <script>
-
-    async function sendShare() {
-      var message = await settext();
+    async function shareMessage(message) {
       const result = await liff.shareTargetPicker([
         {
           type: "text",
           text: message,// ข้อความที่ต้องการแชร์
         },
       ])
-
       if (result) {
         alert(`[${result.status}] Message sent!`)
         document.getElementById("mainform").reset()
@@ -170,27 +173,7 @@
       }
     }
 
-
-    async function sendMessage() {
-      var message = await settext();
-      try {
-        // เรียกใช้ LIFF API เพื่อส่งข้อความ
-        await liff.sendMessages([
-          {
-            type: 'text',
-            text: message
-          }
-          // สามารถเพิ่มประเภทของข้อความและข้อมูลเพิ่มเติมตามต้องการ
-        ]);
-        alert("Message sent successfully!");
-        document.getElementById("mainform").reset()
-      } catch (error) {
-        alert("Error occurred while trying to send message:", error);
-      }
-    }
-
-
-    async function sendMessagebot() {
+    async function sendMessagebot(message) {
       try {
         // เรียกใช้ LIFF API เพื่อส่งข้อความ
         await liff.sendMessages([
@@ -206,6 +189,7 @@
         alert("Error occurred while trying to send message:", error);
       }
     }
+
 
     function logOut() {
       liff.logout()
@@ -229,26 +213,42 @@
     }
 
     async function main() {
+
       liff.ready.then(() => {
+        userId.innerHTML = liff.getOS();
+        getUserProfile()
         if (liff.getOS() === "android") {
-          body.style.backgroundColor = "#88888"
+          body.style.backgroundColor = "#88888";
         }
-        if (liff.isInClient()) {
-          getUserProfile()
+        else if (liff.getOS() === "web") {
+          body.style.backgroundColor = "blue";
+        }
+        else if (liff.getOS() === "ios") {
+          body.style.backgroundColor = "gray";
+        }
+        if (liff.isInClient() && userAgent.includes("Line")) {
+          //getUserProfile()
+          statusMessage.innerHTML = 'LIFF is running in the LINE app.';
+        }
+        else if (!liff.isInClient()) {
+          statusMessage.innerHTML = 'LIFF is not running in the LINE app';
         }
       })
       await liff.init({ liffId: "2004593216-XbA9wj26" })
+      //, withLoginOnExternalBrowser: true 
+
       if (liff.isLoggedIn()) {
-        document.getElementById("btnShare").style.display = "block"
         document.getElementById("btnLogin").style.display = "none"
-        if (!liff.isInClient()) {
-          document.getElementById("btnLogOut").style.display = "block"
+        if (!liff.isInClient()) {//ไม่รันบน inapp
+          document.getElementById("btnLogOut").style.display = "block";
+        }
+        else {
+
         }
       } else {
-        //liff.login()
-        document.getElementById("btnLogin").style.display = "block"
+        //liff.login({redirectUri:"https://sankunakorn.github.io/sanbot-liff/"})
+        document.getElementById("btnLogin").style.display = "block";
       }
-
 
       //กำหนดค่าเริ่มต้น
       var today = new Date();
@@ -256,6 +256,7 @@
       var isoDate = today.toISOString().split('T')[0];
       // กำหนดค่าเริ่มต้นให้กับ input
       document.getElementById('datetime').value = isoDate;
+      //แสดงหน้าหลัก
       goToSelectedPage()
     }
     main()
