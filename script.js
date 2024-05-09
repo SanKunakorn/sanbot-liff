@@ -26,9 +26,9 @@ async function getIpLocation(ip) {
 }
 
 
-async function sendFlexBot() {
+async function sendFlexBot(ip) {
   try {
-    const ipData = await getIpLocation(txtbot); // เรียกใช้ getIpLocation เพื่อดึงข้อมูล IP
+    const ipData = await getIpLocation(ip); // เรียกใช้ getIpLocation เพื่อดึงข้อมูล IP
     const ipMessage = `
       IP Address: ${ipData.query}
       📍ประเทศ: ${ipData.country} : ${ipData.countryCode}
