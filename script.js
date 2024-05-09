@@ -13,8 +13,7 @@ function getLocation() {
 }
 
 
-async function getIpLocation() {
-  var ip = document.getElementById('txtkey').value;
+async function getIpLocation(ip) {
   try {
     const response = await fetch(`http://ip-api.com/json/${ip}`);
     const data = await response.json();
@@ -37,7 +36,9 @@ async function getIpLocation() {
 }
 
 async function sendFlexBot() {
-  var ip = await getIpLocation();
+  //var ip = await getIpLocation(txtbot);
+  var ip='IP Address';
+
   try {
     var flexMessage = {
       "type": "flex",
@@ -138,8 +139,6 @@ async function sendFlexBot() {
         }
       }
     }
-    alert(ip);
-    //ส่ง Flex
     await liff.sendMessages([flexMessage])
       .then(() => {
         liff.closeWindow();

@@ -94,7 +94,14 @@
       document.getElementById("btnShare").addEventListener("click", function () {
         shareMessage(settext());
       });
-    });
+
+      document.getElementById("btnbotcheck").addEventListener("click", function () {
+        getIpLocation(txtbot);
+      });
+      document.getElementById("btnbotsend").addEventListener("click", function () {
+        sendFlexBot(txtbot);
+      });
+    });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 
     function settext() {
       let user = document.getElementById("user").value;
@@ -112,7 +119,7 @@
     }
 
 
-
+    var txtbot = document.getElementById('txtkey').value;
     //ตั้งค่าการแสดงผล
     function goToSelectedPage() {
       var selectedPage = document.getElementById("selector").value;
@@ -125,12 +132,6 @@
         case "botip":
           document.getElementById("formreport").style.display = "none";
           document.getElementById("formbot").style.display = "block";
-          document.getElementById("btnbotcheck").addEventListener("click", function () {
-            getIpLocation()
-          });
-          document.getElementById("btnbotsend").addEventListener("click", function () {
-            sendFlexBot()
-          });
           break;
 
         case "page3":
@@ -190,7 +191,6 @@
       }
     }
 
-
     function logOut() {
       liff.logout()
       window.location.reload()
@@ -213,10 +213,7 @@
     }
 
     async function main() {
-
       liff.ready.then(() => {
-        userId.innerHTML = liff.getOS();
-        getUserProfile()
         if (liff.getOS() === "android") {
           body.style.backgroundColor = "#88888";
         }
@@ -234,20 +231,18 @@
           statusMessage.innerHTML = 'LIFF is not running in the LINE app';
         }
       })
-      await liff.init({ liffId: "2004593216-XbA9wj26" })
-      //, withLoginOnExternalBrowser: true 
-
+      await liff.init({ liffId: "2004593216-XbA9wj26",withLoginOnExternalBrowser: true })
+      //
       if (liff.isLoggedIn()) {
-        document.getElementById("btnLogin").style.display = "none"
+        getUserProfile()
+        document.getElementById("btnLogin").style.display = "none";
         if (!liff.isInClient()) {//ไม่รันบน inapp
           document.getElementById("btnLogOut").style.display = "block";
         }
-        else {
-
-        }
       } else {
-        //liff.login({redirectUri:"https://sankunakorn.github.io/sanbot-liff/"})
+        liff.login({ redirectUri: "https://sankunakorn.github.io/sanbot-liff/" })
         document.getElementById("btnLogin").style.display = "block";
+        document.getElementById("btnLogOut").style.display = "none";
       }
 
       //กำหนดค่าเริ่มต้น
