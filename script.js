@@ -17,29 +17,29 @@ async function getIpLocation(ip) {
   try {
     const response = await fetch(`http://ip-api.com/json/${ip}`);
     const data = await response.json();
-    var message =
-      `IP Address: ${data.query}
-    📍ประเทศ: ${data.country} : ${data.countryCode}
-    📍พื้นที่: ${data.region} : ${data.regionName}
-    📍เมือง: ${data.city}
-    📍Timezone: ${data.timezone}
-    📍ผู้ให้บริการ: ${data.isp}
-    📍Org: ${data.org}
-    📍As: ${data.as}
-    📍https://maps.google.com?q=${data.lat},${data.lon}`;
-    alert(message);
-    return message;
+    alert(data.status);
+    return data; // เปลี่ยนจากการส่งข้อความเป็นการส่งข้อมูล IP
   } catch (error) {
     console.error('Error fetching IP location:', error);
     throw error;
   }
 }
 
-async function sendFlexBot() {
-  //var ip = await getIpLocation(txtbot);
-  var ip='IP Address';
 
+async function sendFlexBot() {
   try {
+    const ipData = await getIpLocation(txtbot); // เรียกใช้ getIpLocation เพื่อดึงข้อมูล IP
+    const ipMessage = `
+      IP Address: ${ipData.query}
+      📍ประเทศ: ${ipData.country} : ${ipData.countryCode}
+      📍พื้นที่: ${ipData.region} : ${ipData.regionName}
+      📍เมือง: ${ipData.city}
+      📍Timezone: ${ipData.timezone}
+      📍ผู้ให้บริการ: ${ipData.isp}
+      📍Org: ${ipData.org}
+      📍As: ${ipData.as}
+      📍https://maps.google.com?q=${ipData.lat},${ipData.lon}`;
+
     var flexMessage = {
       "type": "flex",
       "altText": "ระบบตอบกลับ",
@@ -67,7 +67,7 @@ async function sendFlexBot() {
                 },
                 {
                   "type": "text",
-                  "text": 'เช็ค IP',
+                  "text": 'San Bot',
                   "wrap": true,
                   "color": "#666666",
                   "size": "sm",
@@ -97,7 +97,7 @@ async function sendFlexBot() {
                 },
                 {
                   "type": "text",
-                  "text": ip,//ผล
+                  "text": `${ipMessage}`,//ผล
                   "wrap": true,
                   "color": "#666666",
                   "size": "sm",

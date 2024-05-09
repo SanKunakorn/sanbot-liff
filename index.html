@@ -87,6 +87,8 @@
   </footer>
 
   <script>
+    var txtbot = document.getElementById('txtkey').value;
+
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("btnsend").addEventListener("click", function () {
         sendMessagebot(settext());
@@ -98,8 +100,7 @@
       document.getElementById("btnbotcheck").addEventListener("click", function () {
         getIpLocation(txtbot);
       });
-      document.getElementById("btnbotsend").addEventListener("click", function () {
-        sendFlexBot(txtbot);
+      document.getElementById("btnbotsend").addEventListener("click", function (){
       });
     });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 
@@ -118,8 +119,6 @@
       return message;
     }
 
-
-    var txtbot = document.getElementById('txtkey').value;
     //ตั้งค่าการแสดงผล
     function goToSelectedPage() {
       var selectedPage = document.getElementById("selector").value;
@@ -231,8 +230,8 @@
           statusMessage.innerHTML = 'LIFF is not running in the LINE app';
         }
       })
-      await liff.init({ liffId: "2004593216-XbA9wj26",withLoginOnExternalBrowser: true })
-      //
+      await liff.init({ liffId: "2004593216-XbA9wj26" })
+      //,withLoginOnExternalBrowser: true
       if (liff.isLoggedIn()) {
         getUserProfile()
         document.getElementById("btnLogin").style.display = "none";
@@ -240,7 +239,7 @@
           document.getElementById("btnLogOut").style.display = "block";
         }
       } else {
-        liff.login({ redirectUri: "https://sankunakorn.github.io/sanbot-liff/" })
+        //liff.login({ redirectUri: "https://sankunakorn.github.io/sanbot-liff/" })
         document.getElementById("btnLogin").style.display = "block";
         document.getElementById("btnLogOut").style.display = "none";
       }
