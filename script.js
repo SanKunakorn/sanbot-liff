@@ -97,7 +97,7 @@ async function sendFlexBot(ip) {
                 },
                 {
                   "type": "text",
-                  "text": `${ipMessage}`,//ผล
+                  "text": JSON.stringify(ipData),//ผล
                   "wrap": true,
                   "color": "#666666",
                   "size": "sm",
