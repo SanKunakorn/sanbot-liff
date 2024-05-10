@@ -86,6 +86,8 @@
     <h3>พัฒนาโดย San Kunakorn | งานสืบสวน สภ.นิคมพัฒนา ภ.จว.ระยอง</h3>
   </footer>
 
+
+
   <script>
     var txtbot = document.getElementById('txtkey').value;
 
@@ -98,14 +100,98 @@
       });
 
       document.getElementById("btnbotcheck").addEventListener("click", function () {
-        getIpLocation(txtbot);
+          var flex= getIpLocation(txtbot);
+          alert(flex);
+          
       });
       document.getElementById("btnbotsend").addEventListener("click", function () {
-        sendFlexBot(txtbot);
+            sendMessagebot([flex]);
       });
 
-
     });
+
+
+    async function getIpLocation(ip) {
+      try {
+        const response = await fetch(`http://ip-api.com/json/${ip}`);
+        const ipData = await response.json();
+        const ipMessage = {
+          type: 'flex',
+          altText: 'IP Information',
+          contents: {
+            type: 'bubble',
+            body: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'text',
+                  text: 'IP Information',
+                  weight: 'bold',
+                  size: 'xl'
+                },
+                {
+                  type: 'text',
+                  text: `IP Address: ${ipData.query}`
+                },
+                {
+                  type: 'text',
+                  text: `📍ประเทศ: ${ipData.country} : ${ipData.countryCode}`
+                },
+                {
+                  type: 'text',
+                  text: `📍พื้นที่: ${ipData.region} : ${ipData.regionName}`
+                },
+                {
+                  type: 'text',
+                  text: `📍เมือง: ${ipData.city}`
+                },
+                {
+                  type: 'text',
+                  text: `📍Timezone: ${ipData.timezone}`
+                },
+                {
+                  type: 'text',
+                  text: `📍ผู้ให้บริการ: ${ipData.isp}`
+                },
+                {
+                  type: 'text',
+                  text: `📍Org: ${ipData.org}`
+                },
+                {
+                  type: 'text',
+                  text: `📍As: ${ipData.as}`
+                }
+              ]
+            },
+            footer: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'button',
+                  action: {
+                    type: 'uri',
+                    label: 'View on Map',
+                    uri: `https://maps.google.com?q=${ipData.lat},${ipData.lon}`
+                  }
+                }
+              ]
+            }
+          }
+        };
+        return ipMessage;
+      } catch (error) {
+        console.error('Error fetching IP location:', error);
+        throw error;
+      }
+    }
+
+
+    
+
+
+
 
     function settext() {
       let user = document.getElementById("user").value;
@@ -122,6 +208,8 @@
       return message;
     }
 
+
+
     //ตั้งค่าการแสดงผล
     function goToSelectedPage() {
       var selectedPage = document.getElementById("selector").value;
@@ -134,11 +222,6 @@
         case "botip":
           document.getElementById("formreport").style.display = "none";
           document.getElementById("formbot").style.display = "block";
-
-
-
-
-
           break;
 
         case "page3":
@@ -153,7 +236,11 @@
     }
   </script>
 
+
+
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+
+
 
   <script>
     async function shareMessage(message) {
@@ -166,20 +253,129 @@
       if (result) {
         alert(`[${result.status}] Message sent!`)
         document.getElementById("mainform").reset()
-
       } else {
         const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split('.');
-
         if (minorVer === undefined) {
           alert('ShareTargetPicker was canceled in external browser')
-          return
         }
-
         if (parseInt(majorVer) >= 10 && parseInt(minorVer) >= 10 && parseInt(patchVer) > 0) {
           alert('ShareTargetPicker was canceled in LINE app')
         }
       }
     }
+
+
+
+    async function sendFlex(message) {
+      var flexMessage = {
+        "type": "flex",
+        "altText": "ระบบตอบกลับ",
+        "contents": {
+          "type": "bubble",
+          "header": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ผลการค้นหา",
+                "weight": "bold",
+                "size": "xl",
+                "align": "center"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "icon",
+                    "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                  },
+                  {
+                    "type": "text",
+                    "text": 'San Bot',
+                    "wrap": true,
+                    "color": "#666666",
+                    "size": "sm",
+                    "flex": 5
+                  }
+                ]
+              }
+            ]
+          },
+          "body": {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "lg",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "Results",
+                    "color": "#aaaaaa",
+                    "size": "sm",
+                    "flex": 1
+                  },
+                  {
+                    "type": "text",
+                    "text": message,//ผล
+                    "wrap": true,
+                    "color": "#666666",
+                    "size": "sm",
+                    "flex": 5
+                  }
+                ]
+              },
+              {
+                "type": "separator"
+              }
+            ]
+          },
+          "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "separator"
+              },
+              {
+                "type": "button",
+                "style": "link",
+                "height": "sm",
+                "action": {
+                  "type": "uri",
+                  "label": "San BOT",
+                  "uri": "http://line.me/ti/p/~@223zypdp",
+                },
+                "color": "#00FF66"
+              },
+            ],
+            "flex": 0
+          },
+          "styles": {
+            "header": {
+              "backgroundColor": "#99FFFF"
+            }
+          }
+        }
+      }
+
+      await liff.sendMessages([flexMessage])
+        .then(() => {
+          liff.closeWindow();
+        })
+        .catch((err) => {
+          console.error('Error sending message:', err);
+        });
+    }
+
 
     async function sendMessagebot(message) {
       try {
@@ -198,10 +394,16 @@
       }
     }
 
+
+
+
     function logOut() {
       liff.logout()
       window.location.reload()
     }
+
+
+
 
     async function getUserProfile() {
       try {
@@ -218,6 +420,9 @@
         console.error("Error occurred while trying to get user profile:", error);
       }
     }
+
+
+
 
     async function main() {
       liff.ready.then(() => {
@@ -251,7 +456,6 @@
         document.getElementById("btnLogin").style.display = "block";
         document.getElementById("btnLogOut").style.display = "none";
       }
-
       //กำหนดค่าเริ่มต้น
       var today = new Date();
       // รับค่าวันที่และเวลาในรูปแบบ ISO (YYYY-MM-DD)
@@ -262,9 +466,7 @@
       goToSelectedPage()
     }
     main()
-
   </script>
-
 </body>
 
 </html>

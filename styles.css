@@ -16,6 +16,7 @@ body {
   background: #e1eeea; /* สีพื้นหลังใกล้เคียงกับ Facebook */
   padding: 20px;
   position: relative;
+  margin: 20px;
 }
 
 h1 {
@@ -36,23 +37,22 @@ h3 {
 
 header {
   display: flex;
-  min-width: 95vw;
+  min-width: 90vw;
   background: #f6fffd; /* สีพื้นหลัง section ใกล้เคียงกับ Facebook */
   border: 1px solid #dadbdc; /* สีเส้นขอบ header ใกล้เคียงกับ Facebook */
   border-radius: 20px;
   color: #1877f2; /* สีข้อความใกล้เคียงกับ Facebook */
   text-align: center;
   padding: 20px;
-  margin-bottom: 20px;
 }
 
 main {
-  min-width: 95vw;
+  min-width: 90vw;
   padding: 20px;
 }
 
 section {
-  min-width: 95vw;
+  min-width: 90vw;
   background: #f6fffd; /* สีพื้นหลัง section ใกล้เคียงกับ Facebook */
   border: 1px solid #dadbdc; /* สีเส้นขอบ section ใกล้เคียงกับ Facebook */
   border-radius: 12px;
@@ -102,14 +102,13 @@ button {
 }
 
 footer {
-  min-width: 95vw;
+  min-width: 90vw;
   background: #f6fffd; /* สีพื้นหลัง section ใกล้เคียงกับ Facebook */
   border: 1px solid #dadbdc; /* สีเส้นขอบ footer ใกล้เคียงกับ Facebook */
   border-radius: 10px;
   color: #1877f2; /* สีข้อความใกล้เคียงกับ Facebook */
   text-align: center;
   padding: 20px;
-  margin: 0;
 }
 
 footer h3 {
