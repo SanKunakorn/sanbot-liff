@@ -15,7 +15,7 @@
   <div class="circle">
     <img id="pictureUrl" style="width:100%;">
   </div>
-  <div class="row">
+  <div class="column">
     <h1>
       <p id="displayName"></p>
     </h1>
@@ -86,11 +86,8 @@
     <h3>พัฒนาโดย San Kunakorn | งานสืบสวน สภ.นิคมพัฒนา ภ.จว.ระยอง</h3>
   </footer>
 
-
-
   <script>
-    var txtbot = document.getElementById('txtkey').value;
-
+    
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("btnsend").addEventListener("click", function () {
         sendMessagebot(settext());
@@ -100,104 +97,17 @@
       });
 
       document.getElementById("btnbotcheck").addEventListener("click", function () {
-        getIpLocation(txtbot).then(() => {
-          console.log('Success');
-        })
-          .catch((error) => {
-            console.error('Error:', error);
-          });
+          checkip();
       });
       document.getElementById("btnbotsend").addEventListener("click", function () {
-       
+          sendip();
       });
     });
-
-
-
-
-    async function getIpLocation(ip) {
-      try {
-        const response = await fetch(`http://ip-api.com/json/${ip}`);
-        const data = await response.json();
-        var myIP =
-          `IP Address: ${data.query}
-      📍ประเทศ: ${data.country} : ${data.countryCode}
-      📍พื้นที่: ${data.region} : ${data.regionName}
-      📍เมือง: ${data.city}
-      📍Timezone: ${data.timezone}
-      📍ผู้ให้บริการ: ${data.isp}
-      📍Org: ${data.org}
-      📍As: ${data.as}
-      📍https://maps.google.com?q=${data.lat},${data.lon}`;
-        await liff.sendMessages([
-          {
-            type: 'text',
-            text: myIP, // ข้อความที่ต้องการส่ง
-          }]).then(() => {
-          liff.closeWindow();
-        })
-        .catch((err) => {
-          alert('Error sending message:', err);
-        });
-      }
-      catch (error) {
-        console.error('Error fetching IP location:', error);
-        throw error;
-      }
-    }
-
-
-
-    function settext() {
-      let user = document.getElementById("user").value;
-      let datetimeInput = document.getElementById("datetime");
-      let datetime = datetimeInput.value ? new Date(datetimeInput.value) : new Date(); // Check if datetime input is empty, if yes, use current date
-      let detail = document.getElementById("detail").value;
-      let latlong = document.getElementById("latlong").value;
-      // Options for Thai locale
-      let options = { year: 'numeric', month: 'short', day: 'numeric' };
-      // Convert the date to Thai locale
-      let thaiDate = datetime.toLocaleDateString('th-TH', options);
-      let message = 'เรียน ผู้บังคับบัญชา' + "\n-------------------------" + '\n     วันนี้( ' + thaiDate + ' )' + "\n" + user + ' ' + detail + "\n แผนที่: https://maps.google.com?q=" + latlong + '\n   ' + "     จึงเรียนมาเพื่อโปรดทราบ";
-      alert(`${message}`)
-      return message;
-    }
-
-
-
-    //ตั้งค่าการแสดงผล
-    function goToSelectedPage() {
-      var selectedPage = document.getElementById("selector").value;
-      switch (selectedPage) {
-        case "index":
-          document.getElementById("formbot").style.display = "none";
-          document.getElementById("formreport").style.display = "block";
-          break;
-
-        case "botip":
-          document.getElementById("formreport").style.display = "none";
-          document.getElementById("formbot").style.display = "block";
-          break;
-
-        case "page3":
-          window.location.href = 'https://san-all.web.app';
-          break;
-
-        default:
-          document.getElementById("formip").style.display = "none";
-          document.getElementById("formreport").style.display = "block";
-          break;
-      }
-    }
   </script>
 
-
-
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
-
-
-
   <script>
+
     async function shareMessage(message) {
       const result = await liff.shareTargetPicker([
         {
@@ -207,7 +117,6 @@
       ])
       if (result) {
         alert(`[${result.status}] Message sent!`)
-        document.getElementById("mainform").reset()
       } else {
         const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split('.');
         if (minorVer === undefined) {
@@ -216,6 +125,26 @@
         if (parseInt(majorVer) >= 10 && parseInt(minorVer) >= 10 && parseInt(patchVer) > 0) {
           alert('ShareTargetPicker was canceled in LINE app')
         }
+      }
+    }
+
+    async function checkip() {
+      try {
+        var txtbot = document.getElementById('txtkey').value;
+        var ip = await getIpLocation(txtbot);
+        alert(ip);
+      }
+      catch {
+      }
+    }
+
+    async function sendip() {
+      try {
+        var txtbot = document.getElementById('txtkey').value;
+        var ip = await getIpLocation(txtbot);
+        sendMessagebot(ip);
+      }
+      catch {
       }
     }
 
@@ -321,15 +250,14 @@
           }
         }
       }
-
-      await liff.sendMessages([flexMessage])
-        .then(() => {
-          liff.closeWindow();
-        })
-        .catch((err) => {
-          alert('Error sending message:', err);
-        });
-
+      try {
+        // เรียกใช้ LIFF API เพื่อส่งข้อความ
+        await liff.sendMessages([flexMessage]);
+        alert("Message sent successfully!");
+        liff.closeWindow();
+      } catch (error) {
+        alert("Error occurred while trying to send message:", error);
+      }
     }
 
 
@@ -344,7 +272,7 @@
           // สามารถเพิ่มประเภทของข้อความและข้อมูลเพิ่มเติมตามต้องการ
         ]);
         alert("Message sent successfully!");
-        document.getElementById("mainform").reset()
+        liff.closeWindow();
       } catch (error) {
         alert("Error occurred while trying to send message:", error);
       }
@@ -352,14 +280,10 @@
 
 
 
-
     function logOut() {
       liff.logout()
       window.location.reload()
     }
-
-
-
 
     async function getUserProfile() {
       try {
@@ -377,9 +301,6 @@
       }
     }
 
-
-
-
     async function main() {
       liff.ready.then(() => {
         if (liff.getOS() === "android") {
@@ -391,21 +312,17 @@
         else if (liff.getOS() === "ios") {
           body.style.backgroundColor = "#88888";
         }
+      })
+      await liff.init({ liffId: "2004593216-XbA9wj26" })
+      // ,withLoginOnExternalBrowser: true
+      if (liff.isLoggedIn()) {
+        getUserProfile()
+        document.getElementById("btnLogin").style.display = "none";
         if (liff.isInClient() && userAgent.includes("Line")) {
-          //getUserProfile()
           statusMessage.innerHTML = 'LIFF is running in the LINE app.';
         }
         else if (!liff.isInClient()) {
           statusMessage.innerHTML = 'LIFF is not running in the LINE app';
-        }
-      })
-      await liff.init({ liffId: "2004593216-XbA9wj26" })
-      //,withLoginOnExternalBrowser: true
-      if (liff.isLoggedIn()) {
-        getUserProfile()
-        document.getElementById("btnLogin").style.display = "none";
-        if (!liff.isInClient()) {//ไม่รันบน inapp
-          document.getElementById("btnLogOut").style.display = "block";
         }
       } else {
         //liff.login({ redirectUri: "https://sankunakorn.github.io/sanbot-liff/" })
