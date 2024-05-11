@@ -100,15 +100,21 @@
       });
 
       document.getElementById("btnbotcheck").addEventListener("click", function () {
-          var flex= getIpLocation(txtbot);
-          alert(flex);
-          
+            
       });
       document.getElementById("btnbotsend").addEventListener("click", function () {
-            sendMessagebot([flex]);
+        getIpLocation(txtbot)
+        .then(() => {
+            console.log('Success');
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
       });
 
     });
+
+
 
 
     async function getIpLocation(ip) {
@@ -180,7 +186,15 @@
             }
           }
         };
-        return ipMessage;
+
+        await liff.sendMessages([ipMessage])
+        .then(() => {
+          liff.closeWindow();
+        })
+        .catch((err) => {
+          console.error('Error sending message:', err);
+        });
+        
       } catch (error) {
         console.error('Error fetching IP location:', error);
         throw error;
@@ -189,10 +203,6 @@
 
 
     
-
-
-
-
     function settext() {
       let user = document.getElementById("user").value;
       let datetimeInput = document.getElementById("datetime");
