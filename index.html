@@ -100,18 +100,16 @@
       });
 
       document.getElementById("btnbotcheck").addEventListener("click", function () {
-          sendFlex(txtbot);
-      });
-      document.getElementById("btnbotsend").addEventListener("click", function () {
-        getIpLocation(txtbot)
-          .then(() => {
-            console.log('Success');
-          })
+        getIpLocation(txtbot).then(() => {
+          console.log('Success');
+        })
           .catch((error) => {
             console.error('Error:', error);
           });
       });
-
+      document.getElementById("btnbotsend").addEventListener("click", function () {
+       
+      });
     });
 
 
@@ -131,75 +129,16 @@
       📍Org: ${data.org}
       📍As: ${data.as}
       📍https://maps.google.com?q=${data.lat},${data.lon}`;
-
-
-        /*const ipMessage = {
-          type: 'flex',
-          altText: 'IP Information',
-          contents: {
-            type: 'bubble',
-            body: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [
-                {
-                  type: 'text',
-                  text: 'IP Information',
-                  weight: 'bold',
-                  size: 'xl'
-                },
-                {
-                  type: 'text',
-                  text: `IP Address: ${ipData.query}`
-                },
-                {
-                  type: 'text',
-                  text: `📍ประเทศ: ${ipData.country} : ${ipData.countryCode}`
-                },
-                {
-                  type: 'text',
-                  text: `📍พื้นที่: ${ipData.region} : ${ipData.regionName}`
-                },
-                {
-                  type: 'text',
-                  text: `📍เมือง: ${ipData.city}`
-                },
-                {
-                  type: 'text',
-                  text: `📍Timezone: ${ipData.timezone}`
-                },
-                {
-                  type: 'text',
-                  text: `📍ผู้ให้บริการ: ${ipData.isp}`
-                },
-                {
-                  type: 'text',
-                  text: `📍Org: ${ipData.org}`
-                },
-                {
-                  type: 'text',
-                  text: `📍As: ${ipData.as}`
-                }
-              ]
-            },
-            footer: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [
-                {
-                  type: 'button',
-                  action: {
-                    type: 'uri',
-                    label: 'View on Map',
-                    uri: `https://maps.google.com?q=${ipData.lat},${ipData.lon}`
-                  }
-                }
-              ]
-            }
-          }
-        };
-        */
-        sendMessagebot(myIP);
+        await liff.sendMessages([
+          {
+            type: 'text',
+            text: myIP, // ข้อความที่ต้องการส่ง
+          }]).then(() => {
+          liff.closeWindow();
+        })
+        .catch((err) => {
+          alert('Error sending message:', err);
+        });
       }
       catch (error) {
         console.error('Error fetching IP location:', error);
@@ -447,10 +386,10 @@
           body.style.backgroundColor = "#88888";
         }
         else if (liff.getOS() === "web") {
-          body.style.backgroundColor = "blue";
+          body.style.backgroundColor = "#88888";
         }
         else if (liff.getOS() === "ios") {
-          body.style.backgroundColor = "gray";
+          body.style.backgroundColor = "#88888";
         }
         if (liff.isInClient() && userAgent.includes("Line")) {
           //getUserProfile()
