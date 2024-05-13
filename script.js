@@ -27,11 +27,10 @@ function settext() {
   return message;
 }
 
-async function getIpLocation(ip) {
-  try {
-    const response = await fetch(`http://ip-api.com/json/${ip}`);
-    const data = await response.json();
-    var myIP =
+
+function IptoText(data) {
+  // ตัวอย่างการสร้างข้อความจากข้อมูลที่ได้รับ
+  var myIP =
       `IP Address: ${data.query}
   📍ประเทศ: ${data.country} : ${data.countryCode}
   📍พื้นที่: ${data.region} : ${data.regionName}
@@ -41,39 +40,14 @@ async function getIpLocation(ip) {
   📍Org: ${data.org}
   📍As: ${data.as}
   📍https://maps.google.com?q=${data.lat},${data.lon}`;
-    return myIP;
-  }
-  catch (error) {
-    alert('Error fetching IP location:', error);
-    throw error;
-  }
+  return myIP;
 }
 
 
-//ตั้งค่าการแสดงผล
-function goToSelectedPage() {
-  var selectedPage = document.getElementById("selector").value;
-  switch (selectedPage) {
-    case "index":
-      document.getElementById("formbot").style.display = "none";
-      document.getElementById("formreport").style.display = "block";
-      break;
 
-    case "botip":
-      document.getElementById("formreport").style.display = "none";
-      document.getElementById("formbot").style.display = "block";
-      break;
 
-    case "page3":
-      window.location.href = 'https://san-all.web.app';
-      break;
 
-    default:
-      document.getElementById("formip").style.display = "none";
-      document.getElementById("formreport").style.display = "block";
-      break;
-  }
-}
+
 
 
 
