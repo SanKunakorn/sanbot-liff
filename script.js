@@ -12,6 +12,28 @@ function getLocation() {
   }
 }
 
+function validateThaiID(id) {
+  // ตรวจสอบความยาวของเลขบัตรประชาชน
+  if (id.length !== 13) {
+    return false;
+  }
+  // ตรวจสอบว่าเป็นตัวเลขทั้งหมดหรือไม่
+  if (!/^\d{13}$/.test(id)) {
+    return false;
+  }
+  // คำนวณเช็คดิจิตอล
+  var sum = 0;
+  for (var i = 0; i < 12; i++) {
+    sum += parseInt(id.charAt(i)) * (13 - i);
+  }
+  var checkDigit = (11 - (sum % 11)) % 10;
+  // เปรียบเทียบเช็คดิจิตอล
+  return parseInt(id.charAt(12)) === checkDigit;
+}
+
+
+
+
 function settext() {
   let user = document.getElementById("user").value;
   let datetimeInput = document.getElementById("datetime");
@@ -31,7 +53,7 @@ function settext() {
 function IptoText(data) {
   // ตัวอย่างการสร้างข้อความจากข้อมูลที่ได้รับ
   var myIP =
-      `IP Address: ${data.query}
+  `IP Address: ${data.query}
   📍ประเทศ: ${data.country} : ${data.countryCode}
   📍พื้นที่: ${data.region} : ${data.regionName}
   📍เมือง: ${data.city}

@@ -34,7 +34,8 @@
         <select id="selector" onchange="goToSelectedPage()">
           <option value="index">ตรวจที่เกิดเหตุ</option>
           <option value="botip">เช็ค IP Address</option>
-          <option value="page3">San APP</option>
+          <option value="idcard">ค้นหาจากเลขบัตร</option>
+          <option value="sanapp">San APP</option>
         </select>
       </div>
       <div class="row">
@@ -80,6 +81,17 @@
         <button id="btnbotsend">ส่งข้อความ</button>
       </div>
     </section>
+
+
+    <!--=============================== idcard =======================-->
+    <section id="formidcard">
+      <div class="input-box">
+        <div class="row">
+          <input type="text" id="txtid" placeholder="เลขประจำตัวประชาชน" maxlength="13">
+          <p id="idcheck"></p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -87,7 +99,6 @@
   </footer>
 
   <script>
-
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("btnsend").addEventListener("click", function () {
         sendMessagebot(settext());
@@ -97,14 +108,7 @@
       });
 
       document.getElementById("btnbotcheck").addEventListener("click", function () {
-        const txtbotValue = document.getElementById("txtkey").value;
-        getIpLocation(txtbotValue)
-          .then(() => {
-            alert('Success');
-          })
-          .catch((error) => {
-            alert('Error:', error);
-          });
+        fetchDataAndSendMessage();
       });
 
 
@@ -118,6 +122,16 @@
           });
       });
 
+
+      document.getElementById("txtid").addEventListener("input", function () {
+        var thaiID = document.getElementById("txtid").value;
+        var resultElement = document.getElementById("idcheck");
+        if (validateThaiID(thaiID)) {
+          resultElement.innerText = "✅";
+        } else {
+          resultElement.innerText = "❌";
+        }
+      });
     });
   </script>
 
@@ -372,37 +386,52 @@
         alert("Error occurred while trying to send message:", error);
       }
     }
+
+
     //ตั้งค่าการแสดงผล
     function goToSelectedPage() {
       var selectedPage = document.getElementById("selector").value;
       switch (selectedPage) {
         case "index":
           document.getElementById("formbot").style.display = "none";
+          document.getElementById("formidcard").style.display = "none";
           document.getElementById("formreport").style.display = "block";
           break;
 
         case "botip":
           document.getElementById("formreport").style.display = "none";
+          document.getElementById("formidcard").style.display = "none";
           document.getElementById("formbot").style.display = "block";
           break;
 
-        case "page3":
-          window.location.href = 'https://san-all.web.app';
+        case "idcard":
+          document.getElementById("formreport").style.display = "none";
+          document.getElementById("formbot").style.display = "none";
+          document.getElementById("formidcard").style.display = "block";
+          break;
+
+        case "sanapp":
+          //window.location.href = 'https://san-all.web.app';
+          liff.openWindow({
+            url: 'https://san-all.web.app',
+            external: true
+          });
           break;
 
         default:
           document.getElementById("formip").style.display = "none";
+          document.getElementById("formidcard").style.display = "none";
           document.getElementById("formreport").style.display = "block";
           break;
       }
     }
 
 
-
     function logOut() {
       liff.logout()
       window.location.reload()
     }
+
 
     async function getUserProfile() {
       try {
@@ -413,6 +442,7 @@
         const statusMessage = document.getElementById("statusMessage");
         pictureUrl.src = profile.pictureUrl;
         displayName.innerHTML = profile.displayName;
+        alert(`Logged in as ${profile.displayName}`);
         //userId.innerHTML = profile.userId;
         //statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
       } catch (error) {
@@ -421,44 +451,64 @@
     }
 
 
-    async function main() {
-      liff.ready.then(() => {
-        if (liff.getOS() === "android") {
-          body.style.backgroundColor = "#88888";
-        }
-        else if (liff.getOS() === "web") {
-          body.style.backgroundColor = "#88888";
-        }
-        else if (liff.getOS() === "ios") {
-          body.style.backgroundColor = "#88888";
-        }
-      })
-      await liff.init({ liffId: "2004593216-XbA9wj26" })
-      // ,withLoginOnExternalBrowser: true
+    async function handleLogin() {
       if (liff.isLoggedIn()) {
         getUserProfile()
         document.getElementById("btnLogin").style.display = "none";
-        if (liff.isInClient() && userAgent.includes("Line")) {
-          statusMessage.innerHTML = 'LIFF is running in the LINE app.';
-        }
-        else if (!liff.isInClient()) {
-          statusMessage.innerHTML = 'LIFF is not running in the LINE app';
-        }
-      } else {
+      } else if (!liff.isLoggedIn()) {
+        alert("Login failed. Please try again.");
         //liff.login({ redirectUri: "https://sankunakorn.github.io/sanbot-liff/" })
         document.getElementById("btnLogin").style.display = "block";
         document.getElementById("btnLogOut").style.display = "none";
       }
-      //กำหนดค่าเริ่มต้น
-      var today = new Date();
-      // รับค่าวันที่และเวลาในรูปแบบ ISO (YYYY-MM-DD)
-      var isoDate = today.toISOString().split('T')[0];
-      // กำหนดค่าเริ่มต้นให้กับ input
-      document.getElementById('datetime').value = isoDate;
-      //แสดงหน้าหลัก
+    }
+
+
+    async function initializeLiff() {
+      try {
+        // Initialize LIFF
+        await liff.init({ liffId: "2004593216-XbA9wj26" })
+        // ,withLoginOnExternalBrowser: true
+        handleLogin();
+
+
+        liff.ready.then(() => {
+          if (liff.getOS() === "android") {
+            body.style.backgroundColor = "#88888";
+          }
+          else if (liff.getOS() === "web") {
+            body.style.backgroundColor = "#88888";
+          }
+          else if (liff.getOS() === "ios") {
+            body.style.backgroundColor = "#88888";
+          }
+
+          if (liff.isInClient() && userAgent.includes("Line")) {
+            statusMessage.innerHTML = 'LIFF is running in the LINE app.';
+          }
+          else if (!liff.isInClient()) {
+            statusMessage.innerHTML = 'LIFF is not running in the LINE app';
+          }
+          //กำหนดค่าเริ่มต้น
+          var today = new Date();
+          // รับค่าวันที่และเวลาในรูปแบบ ISO (YYYY-MM-DD)
+          var isoDate = today.toISOString().split('T')[0];
+          // กำหนดค่าเริ่มต้นให้กับ input
+          document.getElementById('datetime').value = isoDate;
+        })
+
+
+      }
+      catch (error) {
+        // Handle initialization errors
+        alert('LIFF initialization failed', error);
+        //alert("LIFF initialization failed. Please try again later.");
+      }
+
       goToSelectedPage()
     }
-    main()
+
+    initializeLiff()
   </script>
 </body>
 
