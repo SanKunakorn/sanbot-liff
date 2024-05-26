@@ -12,10 +12,10 @@
 </head>
 
 <header>
-  <div class="circle">
-    <img id="pictureUrl" style="width:100%;">
-  </div>
   <div class="column">
+    <div class="circle">
+      <img id="pictureUrl" style="width:100%;">
+    </div>
     <h1>
       <p id="displayName"></p>
     </h1>
@@ -71,7 +71,7 @@
       </div>
     </section>
 
-    <!--=============================== รายงานปักหมุด =======================-->
+    <!--=============================== CHECK IP ADDRESS =======================-->
     <section id="formbot">
       <div class="input-box">
         <input type="text" id="txtkey" placeholder="Keywords | คำค้นหา">
@@ -83,7 +83,7 @@
     </section>
 
 
-    <!--=============================== idcard =======================-->
+    <!--=============================== ID CARD =======================-->
     <section id="formidcard">
       <div class="input-box">
         <div class="row">
@@ -108,20 +108,15 @@
       });
 
       document.getElementById("btnbotcheck").addEventListener("click", function () {
-        fetchDataAndSendMessage();
+        sendFlex(
+          'Flex'
+        )
       });
 
 
       document.getElementById("btnbotsend").addEventListener("click", function () {
         fetchDataAndSendMessage()
-          .then(() => {
-            alert('Success');
-          })
-          .catch((error) => {
-            alert('Error:', error);
-          });
       });
-
 
       document.getElementById("txtid").addEventListener("input", function () {
         var thaiID = document.getElementById("txtid").value;
@@ -163,100 +158,22 @@
         const userInput = document.getElementById("txtkey").value;
         const response = await fetch(`http://ip-api.com/json/${userInput}`);
         const data = await response.json();
-        const message = await IptoText(data);
-        alert(message);
-        await sendMessagebot(message);
+        var myIP =
+          `IP Address: ${data.query}
+  📍ประเทศ: ${data.country} : ${data.countryCode}
+  📍พื้นที่: ${data.region} : ${data.regionName}
+  📍เมือง: ${data.city}
+  📍Timezone: ${data.timezone}
+  📍ผู้ให้บริการ: ${data.isp}
+  📍Org: ${data.org}
+  📍As: ${data.as}
+  📍https://maps.google.com?q=${data.lat},${data.lon}`;
+        alert(myIP);
+        await sendMessagebot(myIP);
       } catch (error) {
         alert('Error:', error);
       }
     }
-
-
-    async function getIpLocation(ip) {
-      try {
-        const response = await fetch(`http://ip-api.com/json/${ip}`);
-        const ipData = await response.json();
-        const ipMessage = {
-          type: 'flex',
-          altText: 'IP Information',
-          contents: {
-            type: 'bubble',
-            body: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [
-                {
-                  type: 'text',
-                  text: 'IP Information',
-                  weight: 'bold',
-                  size: 'xl'
-                },
-                {
-                  type: 'text',
-                  text: `IP Address: ${ipData.query}`
-                },
-                {
-                  type: 'text',
-                  text: `📍ประเทศ: ${ipData.country} : ${ipData.countryCode}`
-                },
-                {
-                  type: 'text',
-                  text: `📍พื้นที่: ${ipData.region} : ${ipData.regionName}`
-                },
-                {
-                  type: 'text',
-                  text: `📍เมือง: ${ipData.city}`
-                },
-                {
-                  type: 'text',
-                  text: `📍Timezone: ${ipData.timezone}`
-                },
-                {
-                  type: 'text',
-                  text: `📍ผู้ให้บริการ: ${ipData.isp}`
-                },
-                {
-                  type: 'text',
-                  text: `📍Org: ${ipData.org}`
-                },
-                {
-                  type: 'text',
-                  text: `📍As: ${ipData.as}`
-                }
-              ]
-            },
-            footer: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [
-                {
-                  type: 'button',
-                  action: {
-                    type: 'uri',
-                    label: 'View on Map',
-                    uri: `https://maps.google.com?q=${ipData.lat},${ipData.lon}`
-                  }
-                }
-              ]
-            }
-          }
-        };
-
-        await liff.sendMessages([ipMessage]);
-        liff.closeWindow();
-
-      } catch (error) {
-        console.error('Error fetching IP location:', error);
-        throw error;
-      }
-    }
-
-
-
-
-
-
-
 
 
     async function sendFlex(message) {
@@ -396,6 +313,12 @@
           document.getElementById("formbot").style.display = "none";
           document.getElementById("formidcard").style.display = "none";
           document.getElementById("formreport").style.display = "block";
+
+          let datetimeInput = document.getElementById("datetime");
+          // Check if datetime input is empty, if yes, use current date
+          let datetime = datetimeInput.value ? new Date(datetimeInput.value) : new Date();
+          // รับค่าวันที่และเวลาในรูปแบบ ISO (YYYY-MM-DD)
+          datetimeInput.value = datetime.toISOString().split('T')[0];
           break;
 
         case "botip":
@@ -467,37 +390,28 @@
     async function initializeLiff() {
       try {
         // Initialize LIFF
-        await liff.init({ liffId: "2004593216-XbA9wj26" })
-        // ,withLoginOnExternalBrowser: true
-        handleLogin();
+        await liff.init({ liffId: "2004593216-XbA9wj26" }).then(() => {
+          // ,withLoginOnExternalBrowser: true
+          handleLogin();
 
-
-        liff.ready.then(() => {
-          if (liff.getOS() === "android") {
-            body.style.backgroundColor = "#88888";
-          }
-          else if (liff.getOS() === "web") {
-            body.style.backgroundColor = "#88888";
-          }
-          else if (liff.getOS() === "ios") {
-            body.style.backgroundColor = "#88888";
-          }
-
-          if (liff.isInClient() && userAgent.includes("Line")) {
-            statusMessage.innerHTML = 'LIFF is running in the LINE app.';
-          }
-          else if (!liff.isInClient()) {
-            statusMessage.innerHTML = 'LIFF is not running in the LINE app';
-          }
-          //กำหนดค่าเริ่มต้น
-          var today = new Date();
-          // รับค่าวันที่และเวลาในรูปแบบ ISO (YYYY-MM-DD)
-          var isoDate = today.toISOString().split('T')[0];
-          // กำหนดค่าเริ่มต้นให้กับ input
-          document.getElementById('datetime').value = isoDate;
+          liff.ready.then(() => {
+            if (liff.getOS() === "android") {
+              body.style.backgroundColor = "#88888";
+            }
+            else if (liff.getOS() === "web") {
+              body.style.backgroundColor = "#88888";
+            }
+            else if (liff.getOS() === "ios") {
+              body.style.backgroundColor = "#88888";
+            }
+            if (liff.isInClient() && userAgent.includes("Line")) {
+              statusMessage.innerHTML = 'LIFF is running in the LINE app.';
+            }
+            else if (!liff.isInClient()) {
+              statusMessage.innerHTML = 'LIFF is not running in the LINE app';
+            }
+          })
         })
-
-
       }
       catch (error) {
         // Handle initialization errors

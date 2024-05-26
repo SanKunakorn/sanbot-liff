@@ -50,20 +50,6 @@ function settext() {
 }
 
 
-function IptoText(data) {
-  // ตัวอย่างการสร้างข้อความจากข้อมูลที่ได้รับ
-  var myIP =
-  `IP Address: ${data.query}
-  📍ประเทศ: ${data.country} : ${data.countryCode}
-  📍พื้นที่: ${data.region} : ${data.regionName}
-  📍เมือง: ${data.city}
-  📍Timezone: ${data.timezone}
-  📍ผู้ให้บริการ: ${data.isp}
-  📍Org: ${data.org}
-  📍As: ${data.as}
-  📍https://maps.google.com?q=${data.lat},${data.lon}`;
-  return myIP;
-}
 
 
 
