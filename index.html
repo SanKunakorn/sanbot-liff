@@ -109,7 +109,7 @@
 
       document.getElementById("btnbotcheck").addEventListener("click", function () {
         sendFlex(
-          'Flex'
+          'Title','Message'
         )
       });
 
@@ -156,7 +156,12 @@
     async function fetchDataAndSendMessage() {
       try {
         const userInput = document.getElementById("txtkey").value;
-        const response = await fetch(`http://ip-api.com/json/${userInput}`);
+        const response = await fetch(`http://ip-api.com/json/${userInput}`,
+          {
+            method: 'GET', headers: {
+              'Content-Type': 'application/json'
+            }
+          });
         const data = await response.json();
         var myIP =
           `IP Address: ${data.query}
@@ -172,11 +177,12 @@
         await sendMessagebot(myIP);
       } catch (error) {
         alert('Error:', error);
+        throw error;
       }
     }
 
 
-    async function sendFlex(message) {
+    async function sendFlex(title,message) {
       var flexMessage = {
         "type": "flex",
         "altText": "ระบบตอบกลับ",
@@ -190,92 +196,60 @@
                 "type": "text",
                 "text": "ผลการค้นหา",
                 "weight": "bold",
+                "color": "#1DB446",
                 "size": "xl",
                 "align": "center"
-              },
-              {
-                "type": "box",
-                "layout": "baseline",
-                "spacing": "sm",
-                "contents": [
-                  {
-                    "type": "icon",
-                    "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-                  },
-                  {
-                    "type": "text",
-                    "text": 'San Bot',
-                    "wrap": true,
-                    "color": "#666666",
-                    "size": "sm",
-                    "flex": 5
-                  }
-                ]
               }
             ]
           },
           "body": {
             "type": "box",
             "layout": "vertical",
-            "margin": "lg",
-            "spacing": "sm",
             "contents": [
               {
                 "type": "box",
-                "layout": "baseline",
-                "spacing": "sm",
+                "layout": "vertical",
                 "contents": [
                   {
                     "type": "text",
-                    "text": "Results",
-                    "color": "#aaaaaa",
-                    "size": "sm",
-                    "flex": 1
+                    "text": title
                   },
                   {
                     "type": "text",
-                    "text": message,//ผล
-                    "wrap": true,
-                    "color": "#666666",
-                    "size": "sm",
-                    "flex": 5
+                    "text": message
                   }
                 ]
-              },
-              {
-                "type": "separator"
               }
             ]
           },
           "footer": {
             "type": "box",
-            "layout": "vertical",
-            "spacing": "sm",
+            "layout": "horizontal",
+            "margin": "md",
             "contents": [
               {
-                "type": "separator"
-              },
-              {
                 "type": "button",
-                "style": "link",
-                "height": "sm",
                 "action": {
                   "type": "uri",
-                  "label": "San BOT",
-                  "uri": "http://line.me/ti/p/~@223zypdp",
+                  "label": "Line",
+                  "uri": "http://line.me/ti/p/~@223zypdp"
                 },
-                "color": "#00FF66"
-              },
-            ],
-            "flex": 0
+                "style": "link"
+              }
+            ]
           },
           "styles": {
             "header": {
-              "backgroundColor": "#99FFFF"
+              "separator": true,
+              "backgroundColor": "#29515A"
+            },
+            "footer": {
+              "backgroundColor": "#ECFCFF"
             }
           }
         }
       }
+
       try {
         // เรียกใช้ LIFF API เพื่อส่งข้อความ
         await liff.sendMessages([flexMessage]);
