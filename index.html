@@ -13,16 +13,18 @@
 
 <header>
   <div class="column">
-    <div class="circle">
-      <img id="pictureUrl" style="width:100%;">
+    <div class="row">
+      <div class="circle">
+        <img id="pictureUrl" style="width:100%;">
+      </div>
+      <h1>
+        <p id="displayName"></p>
+      </h1>
+      <h3>
+        <p id="userId"></p>
+        <p id="statusMessage"></p>
+      </h3>
     </div>
-    <h1>
-      <p id="displayName"></p>
-    </h1>
-    <h3>
-      <p id="userId"></p>
-      <p id="statusMessage"></p>
-    </h3>
   </div>
 </header>
 
@@ -31,7 +33,7 @@
   <main>
     <section>
       <div class="row">
-        <select id="selector" onchange="goToSelectedPage()">
+        <select id="selector" onchange="SelectedPage()">
           <option value="index">ตรวจที่เกิดเหตุ</option>
           <option value="botip">เช็ค IP Address</option>
           <option value="idcard">ค้นหาจากเลขบัตร</option>
@@ -109,7 +111,7 @@
 
       document.getElementById("btnbotcheck").addEventListener("click", function () {
         sendFlex(
-          'Title','Message'
+          'Title', 'Message'
         )
       });
 
@@ -140,6 +142,7 @@
           text: message,// ข้อความที่ต้องการแชร์
         },
       ])
+
       if (result) {
         alert(`[${result.status}] Message sent!`)
       } else {
@@ -182,7 +185,7 @@
     }
 
 
-    async function sendFlex(title,message) {
+    async function sendFlex(title, message) {
       var flexMessage = {
         "type": "flex",
         "altText": "ระบบตอบกลับ",
@@ -280,7 +283,7 @@
 
 
     //ตั้งค่าการแสดงผล
-    function goToSelectedPage() {
+    function SelectedPage() {
       var selectedPage = document.getElementById("selector").value;
       switch (selectedPage) {
         case "index":
@@ -339,7 +342,7 @@
         const statusMessage = document.getElementById("statusMessage");
         pictureUrl.src = profile.pictureUrl;
         displayName.innerHTML = profile.displayName;
-        alert(`Logged in as ${profile.displayName}`);
+        //alert(`Logged in as ${profile.displayName}`);
         //userId.innerHTML = profile.userId;
         //statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
       } catch (error) {
@@ -393,7 +396,7 @@
         //alert("LIFF initialization failed. Please try again later.");
       }
 
-      goToSelectedPage()
+      SelectedPage()
     }
 
     initializeLiff()

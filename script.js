@@ -45,7 +45,7 @@ function settext() {
   // Convert the date to Thai locale
   let thaiDate = datetime.toLocaleDateString('th-TH', options);
   let message = 'เรียน ผู้บังคับบัญชา' + "\n-------------------------" + '\n     วันนี้( ' + thaiDate + ' )' + "\n" + user + ' ' + detail + "\n แผนที่: https://maps.google.com?q=" + latlong + '\n   ' + "     จึงเรียนมาเพื่อโปรดทราบ";
-  alert(`${message}`)
+  //alert(`${message}`)
   return message;
 }
 
