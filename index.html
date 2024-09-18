@@ -21,10 +21,10 @@
         <p id="displayName"></p>
       </h1>
     </div>
-      <h3>
-        <p id="userId"></p>
-        <p id="statusMessage"></p>
-      </h3>
+    <h3>
+      <p id="userId"></p>
+      <p id="statusMessage"></p>
+    </h3>
   </div>
 </header>
 
@@ -67,7 +67,7 @@
       </div>
       <div class="row">
         <button id="btnsettext" onclick="settext()">ตัวอย่าง</button>
-        <button id="btnsend">ส่ง</button>
+        <button id="btnsendrp">ส่ง</button>
         <button id="btnShare">แชร์</button>
       </div>
     </section>
@@ -78,8 +78,7 @@
         <input type="text" id="txtkey" placeholder="Keywords | คำค้นหา">
       </div>
       <div class="row">
-        <button id="btnbotcheck">ตรวจสอบ</button>
-        <button id="btnbotsend">ส่งข้อความ</button>
+        <button id="btnbotcheckip">ตรวจสอบ</button>
       </div>
     </section>
 
@@ -91,6 +90,7 @@
           <input type="text" id="txtid" placeholder="เลขประจำตัวประชาชน" maxlength="13">
           <p id="idcheck"></p>
         </div>
+        <button id="btnidcheck">ตรวจสอบ</button>
       </div>
     </section>
   </main>
@@ -100,30 +100,32 @@
   </footer>
 
   <script>
+
     document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("btnsend").addEventListener("click", function () {
+      document.getElementById("btnsendrp").addEventListener("click", function () {
         sendMessagebot(settext());
       });
-      document.getElementById("btnShare").addEventListener("click", function () {
-        shareMessage(settext());
+
+
+      document.getElementById("btnbotcheckip").addEventListener("click", function () {
+        var thaiID = document.getElementById("txtkey").value;
+        sendMessagebot('Ip#'+thaiID)
       });
 
-      document.getElementById("btnbotcheck").addEventListener("click", function () {
-        sendFlex(
-          'Title', 'Message'
-        )
-      });
-
-
-      document.getElementById("btnbotsend").addEventListener("click", function () {
+      document.getElementById("btnbotsendip").addEventListener("click", function () {
         fetchDataAndSendMessage()
       });
+
+
 
       document.getElementById("txtid").addEventListener("input", function () {
         var thaiID = document.getElementById("txtid").value;
         var resultElement = document.getElementById("idcheck");
         if (validateThaiID(thaiID)) {
           resultElement.innerText = "✅";
+          document.getElementById("btnidcheck").addEventListener("click", function () {
+            sendMessagebot('Id#'+ thaiID)
+          });
         } else {
           resultElement.innerText = "❌";
         }
@@ -184,27 +186,14 @@
     }
 
 
-    async function sendFlex(title, message) {
+    async function sendFlex(message) {
       var flexMessage = {
         "type": "flex",
         "altText": "ระบบตอบกลับ",
         "contents": {
           "type": "bubble",
+          "size": "mega",
           "header": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "ผลการค้นหา",
-                "weight": "bold",
-                "color": "#1DB446",
-                "size": "xl",
-                "align": "center"
-              }
-            ]
-          },
-          "body": {
             "type": "box",
             "layout": "vertical",
             "contents": [
@@ -214,44 +203,81 @@
                 "contents": [
                   {
                     "type": "text",
-                    "text": title
-                  },
-                  {
-                    "type": "uri",
-                    "label": title,
-                    "uri": message
+                    "text": "ผลการตรวจสอบ",
+                    "color": "#ffffff",
+                    "size": "xl",
+                    "flex": 4,
+                    "weight": "bold",
+                    "align": "center"
                   }
                 ]
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "คำค้นหา",
+                    "color": "#ffffff66",
+                    "size": "sm"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Keywords",
+                    "color": "#ffffff",
+                    "size": "md",
+                    "flex": 4,
+                    "weight": "regular"
+                  }
+                ]
+              }
+            ],
+            "paddingAll": "20px",
+            "backgroundColor": "#006666",
+            "spacing": "md",
+            "height": "120px",
+            "paddingTop": "22px"
+          },
+          "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "ตรวจสอบ",
+                  "uri": "http://linecorp.com/"+message
+                },
+                "style": "link"
               }
             ]
           },
           "footer": {
             "type": "box",
-            "layout": "horizontal",
-            "margin": "md",
+            "layout": "vertical",
             "contents": [
               {
                 "type": "button",
                 "action": {
                   "type": "uri",
                   "label": "Line",
-                  "uri": "http://line.me/ti/p/~@223zypdp"
+                  "uri": "http://linecorp.com/"
                 },
-                "style": "link"
+                "color": "#ffffff",
+                "style": "link",
+                "height": "sm",
+                "gravity": "center"
               }
-            ]
-          },
-          "styles": {
-            "header": {
-              "separator": true,
-              "backgroundColor": "#29515A"
-            },
-            "footer": {
-              "backgroundColor": "#ECFCFF"
-            }
+            ],
+            "backgroundColor": "#5F9EA0",
+            "height": "54px",
+            "spacing": "xs"
           }
         }
       }
+
 
       try {
         // เรียกใช้ LIFF API เพื่อส่งข้อความ
