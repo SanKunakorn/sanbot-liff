@@ -25,12 +25,12 @@
 
     </div>
 
-    <h3>
+    <h2>
       <p id="userId"></p>
       <p id="statusMessage"></p>
       <p id="os"></p>
       <p id="inapp"></p>
-    </h3>
+    </h2>
 
   </div>
 </header>
@@ -57,8 +57,8 @@
       <div class="input-box">
         <form id="mainform">
           <div class="row">
-            <input type="date" id="datetime">
-            <input list="userlist" id="user" placeholder="เลือกผู้ปฏิบัติงาน">
+              <input type="date" id="datetime">
+              <input list="userlist" id="user" placeholder="เลือกผู้ปฏิบัติงาน">
             <datalist id="userlist">
               <option value="ชุดสืบสวน">
               <option value="ร้อยเวร 20">
@@ -94,17 +94,19 @@
     <section id="formidcard">
       <div class="input-box">
         <div class="row">
-        <input type="text" id="txtid" placeholder="เลขประจำตัวประชาชน" maxlength="13">
-        <p id="idcheck"></p>
+          <input type="text" id="txtid" placeholder="เลขประจำตัวประชาชน" maxlength="13">
+          <p id="idcheck"></p>
         </div>
         <button id="btnidcheck">ตรวจสอบ</button>
       </div>
     </section>
   </main>
 
+
   <footer>
     <h3>พัฒนาโดย San Kunakorn | งานสืบสวน สภ.นิคมพัฒนา ภ.จว.ระยอง</h3>
   </footer>
+
 
   <script>
 
@@ -136,7 +138,7 @@
         } else {
           alert('กรุณากรอกหมายเลขบัตรประชาชนให้ถูกต้อง');
         }
-      }); 
+      });
 
       document.getElementById("txtid").addEventListener("input", function () {
         var thaiID = document.getElementById("txtid").value;
@@ -175,140 +177,140 @@
     }
 
 
-/*
-    async function fetchDataAndSendMessage() {
-      try {
-        const userInput = document.getElementById("txtkey").value;
-        const response = await fetch(`http://ip-api.com/json/${userInput}`,
-          {
-            method: 'GET', headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-        const data = await response.json();
-        var myIP =
-          `IP Address: ${data.query}
-  📍ประเทศ: ${data.country} : ${data.countryCode}
-  📍พื้นที่: ${data.region} : ${data.regionName}
-  📍เมือง: ${data.city}
-  📍Timezone: ${data.timezone}
-  📍ผู้ให้บริการ: ${data.isp}
-  📍Org: ${data.org}
-  📍As: ${data.as}
-  📍https://maps.google.com?q=${data.lat},${data.lon}`;
-        alert(myIP);
-        await sendMessagebot(myIP);
-      } catch (error) {
-        alert('Error:', error);
-        throw error;
-      }
-    }
-
-
-    async function sendFlex(message) {
-      var flexMessage = {
-        "type": "flex",
-        "altText": "ระบบตอบกลับ",
-        "contents": {
-          "type": "bubble",
-          "size": "mega",
-          "header": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
+    /*
+        async function fetchDataAndSendMessage() {
+          try {
+            const userInput = document.getElementById("txtkey").value;
+            const response = await fetch(`http://ip-api.com/json/${userInput}`,
               {
+                method: 'GET', headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+            const data = await response.json();
+            var myIP =
+              `IP Address: ${data.query}
+      📍ประเทศ: ${data.country} : ${data.countryCode}
+      📍พื้นที่: ${data.region} : ${data.regionName}
+      📍เมือง: ${data.city}
+      📍Timezone: ${data.timezone}
+      📍ผู้ให้บริการ: ${data.isp}
+      📍Org: ${data.org}
+      📍As: ${data.as}
+      📍https://maps.google.com?q=${data.lat},${data.lon}`;
+            alert(myIP);
+            await sendMessagebot(myIP);
+          } catch (error) {
+            alert('Error:', error);
+            throw error;
+          }
+        }
+    
+    
+        async function sendFlex(message) {
+          var flexMessage = {
+            "type": "flex",
+            "altText": "ระบบตอบกลับ",
+            "contents": {
+              "type": "bubble",
+              "size": "mega",
+              "header": {
                 "type": "box",
                 "layout": "vertical",
                 "contents": [
                   {
-                    "type": "text",
-                    "text": "ผลการตรวจสอบ",
-                    "color": "#ffffff",
-                    "size": "xl",
-                    "flex": 4,
-                    "weight": "bold",
-                    "align": "center"
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "text",
+                        "text": "ผลการตรวจสอบ",
+                        "color": "#ffffff",
+                        "size": "xl",
+                        "flex": 4,
+                        "weight": "bold",
+                        "align": "center"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "text",
+                        "text": "คำค้นหา",
+                        "color": "#ffffff66",
+                        "size": "sm"
+                      },
+                      {
+                        "type": "text",
+                        "text": "Keywords",
+                        "color": "#ffffff",
+                        "size": "md",
+                        "flex": 4,
+                        "weight": "regular"
+                      }
+                    ]
+                  }
+                ],
+                "paddingAll": "20px",
+                "backgroundColor": "#006666",
+                "spacing": "md",
+                "height": "120px",
+                "paddingTop": "22px"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "uri",
+                      "label": "ตรวจสอบ",
+                      "uri": "http://linecorp.com/" + message
+                    },
+                    "style": "link"
                   }
                 ]
               },
-              {
+              "footer": {
                 "type": "box",
                 "layout": "vertical",
                 "contents": [
                   {
-                    "type": "text",
-                    "text": "คำค้นหา",
-                    "color": "#ffffff66",
-                    "size": "sm"
-                  },
-                  {
-                    "type": "text",
-                    "text": "Keywords",
+                    "type": "button",
+                    "action": {
+                      "type": "uri",
+                      "label": "Line",
+                      "uri": "http://linecorp.com/"
+                    },
                     "color": "#ffffff",
-                    "size": "md",
-                    "flex": 4,
-                    "weight": "regular"
+                    "style": "link",
+                    "height": "sm",
+                    "gravity": "center"
                   }
-                ]
+                ],
+                "backgroundColor": "#5F9EA0",
+                "height": "54px",
+                "spacing": "xs"
               }
-            ],
-            "paddingAll": "20px",
-            "backgroundColor": "#006666",
-            "spacing": "md",
-            "height": "120px",
-            "paddingTop": "22px"
-          },
-          "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "button",
-                "action": {
-                  "type": "uri",
-                  "label": "ตรวจสอบ",
-                  "uri": "http://linecorp.com/" + message
-                },
-                "style": "link"
-              }
-            ]
-          },
-          "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "button",
-                "action": {
-                  "type": "uri",
-                  "label": "Line",
-                  "uri": "http://linecorp.com/"
-                },
-                "color": "#ffffff",
-                "style": "link",
-                "height": "sm",
-                "gravity": "center"
-              }
-            ],
-            "backgroundColor": "#5F9EA0",
-            "height": "54px",
-            "spacing": "xs"
+            }
+          }
+    
+    
+    
+          try {
+            // เรียกใช้ LIFF API เพื่อส่งข้อความ
+            await liff.sendMessages([flexMessage]);
+            alert("Message sent successfully!");
+            liff.closeWindow();
+          } catch (error) {
+            alert("Error occurred while trying to send message:", error);
           }
         }
-      }
-
-
-
-      try {
-        // เรียกใช้ LIFF API เพื่อส่งข้อความ
-        await liff.sendMessages([flexMessage]);
-        alert("Message sent successfully!");
-        liff.closeWindow();
-      } catch (error) {
-        alert("Error occurred while trying to send message:", error);
-      }
-    }
-*/
+    */
 
     async function sendMessagebot(message) {
       try {
@@ -389,8 +391,8 @@
         pictureUrl.src = profile.pictureUrl;
         displayName.innerHTML = profile.displayName;
         //alert(`Logged in as ${profile.displayName}`);
-        userId.innerHTML = profile.displayName+'ลงชื่อเข้าใช้งาน';
-        statusMessage.innerHTML = profile.statusMessage??'';
+        userId.innerHTML = profile.displayName + ' ลงชื่อเข้าใช้งาน';
+        statusMessage.innerHTML = profile.statusMessage ?? '';
       } catch (error) {
         console.error("Error occurred while trying to get user profile:", error);
       }
@@ -416,19 +418,19 @@
         await liff.init({ liffId: "2004593216-XbA9wj26" }).then(() => {
           // ,withLoginOnExternalBrowser: true
           handleLogin();
-          
+
           liff.ready.then(() => {
             if (liff.getOS() === "android") {
               body.style.backgroundColor = "#88888";
-              os.innerHTML='OS:'+liff.getOS()
+              os.innerHTML = 'OS:' + liff.getOS()
             }
             else if (liff.getOS() === "web") {
               body.style.backgroundColor = "#88888";
-              os.innerHTML='OS:'+liff.getOS()
+              os.innerHTML = 'OS:' + liff.getOS()
             }
             else if (liff.getOS() === "ios") {
               body.style.backgroundColor = "#88888";
-              os.innerHTML='OS:'+liff.getOS()
+              os.innerHTML = 'OS:' + liff.getOS()
             }
             if (liff.isInClient() && userAgent.includes("Line")) {
               //inapp.innerHTML = 'Line';
