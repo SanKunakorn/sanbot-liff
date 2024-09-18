@@ -20,7 +20,7 @@
       </div>
 
       <h1>
-        <p id="displayName"></p>
+        <p id="displayName">Name</p>
       </h1>
 
     </div>
@@ -28,6 +28,8 @@
     <h3>
       <p id="userId"></p>
       <p id="statusMessage"></p>
+      <p id="os"></p>
+      <p id="inapp"></p>
     </h3>
 
   </div>
@@ -387,8 +389,8 @@
         pictureUrl.src = profile.pictureUrl;
         displayName.innerHTML = profile.displayName;
         //alert(`Logged in as ${profile.displayName}`);
-        //userId.innerHTML = profile.userId;
-        //statusMessage.innerHTML = "<b>statusMessage:</b> " + profile.statusMessage;
+        userId.innerHTML = profile.displayName+'ลงชื่อเข้าใช้งาน';
+        statusMessage.innerHTML = profile.statusMessage??'';
       } catch (error) {
         console.error("Error occurred while trying to get user profile:", error);
       }
@@ -400,7 +402,7 @@
         getUserProfile()
         document.getElementById("btnLogin").style.display = "none";
       } else if (!liff.isLoggedIn()) {
-        alert("Login failed. Please try again.");
+        //alert("Login failed. Please try again.");
         //liff.login({ redirectUri: "https://sankunakorn.github.io/sanbot-liff/" })
         document.getElementById("btnLogin").style.display = "block";
         document.getElementById("btnLogOut").style.display = "none";
@@ -414,22 +416,25 @@
         await liff.init({ liffId: "2004593216-XbA9wj26" }).then(() => {
           // ,withLoginOnExternalBrowser: true
           handleLogin();
-
+          
           liff.ready.then(() => {
             if (liff.getOS() === "android") {
               body.style.backgroundColor = "#88888";
+              os.innerHTML='OS:'+liff.getOS()
             }
             else if (liff.getOS() === "web") {
               body.style.backgroundColor = "#88888";
+              os.innerHTML='OS:'+liff.getOS()
             }
             else if (liff.getOS() === "ios") {
               body.style.backgroundColor = "#88888";
+              os.innerHTML='OS:'+liff.getOS()
             }
             if (liff.isInClient() && userAgent.includes("Line")) {
-              statusMessage.innerHTML = 'LIFF is running in the LINE app.';
+              //inapp.innerHTML = 'Line';
             }
             else if (!liff.isInClient()) {
-              statusMessage.innerHTML = 'LIFF is not running in the LINE app';
+              //inapp.innerHTML = 'ExternalBrowser';
             }
           })
         })
@@ -439,7 +444,6 @@
         alert('LIFF initialization failed', error);
         //alert("LIFF initialization failed. Please try again later.");
       }
-
       SelectedPage()
     }
 
