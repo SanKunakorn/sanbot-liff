@@ -14,17 +14,22 @@
 <header>
   <div class="column">
     <div class="row">
+
       <div class="circle">
         <img id="pictureUrl" style="width:100%;">
       </div>
+
       <h1>
         <p id="displayName"></p>
       </h1>
+
     </div>
+
     <h3>
       <p id="userId"></p>
       <p id="statusMessage"></p>
     </h3>
+
   </div>
 </header>
 
@@ -75,10 +80,10 @@
     <!--=============================== CHECK IP ADDRESS =======================-->
     <section id="formbot">
       <div class="input-box">
-        <input type="text" id="txtkey" placeholder="Keywords | คำค้นหา">
+        <input type="text" id="txtip" placeholder="Keywords | คำค้นหา">
       </div>
       <div class="row">
-        <button id="btnbotcheckip">ตรวจสอบ</button>
+        <button id="btncheckip">ตรวจสอบ</button>
       </div>
     </section>
 
@@ -106,18 +111,20 @@
         sendMessagebot(settext());
       });
 
-      document.getElementById("btnbotcheckip").addEventListener("click", function () {
-        var ip = document.getElementById("txtkey").value;
+
+      document.getElementById("btnShare").addEventListener("click", function () {
+        shareMessage(settext())
+      });
+
+
+      document.getElementById("btncheckip").addEventListener("click", function () {
+        var ip = document.getElementById("txtip").value;
         if (ip != '') {
           sendMessagebot('Ip#' + ip);
         }
         else {
           alert('กรุณากรอก IP Address ให้ถูกต้อง');
         }
-      });
-
-      document.getElementById("btnbotsendip").addEventListener("click", function () {
-       
       });
 
       document.getElementById("btnidcheck").addEventListener("click", function () {
@@ -138,7 +145,6 @@
           resultElement.innerText = "❌";
         }
       });
-
     });
 
   </script>
