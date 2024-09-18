@@ -37,8 +37,8 @@ header,footer{
   background: #17443a; /* สีพื้นหลังใกล้เคียงกับ Facebook */
   border: 1px solid #dadbdc; /* สีเส้นขอบใกล้เคียงกับ Facebook */
   border-radius: 12px;
-  /*padding: 20px;
-  margin :10px;*/
+  padding: 20px;
+  /*margin :10px;*/
   text-align: center;
   color: #dcd90e; /* สีข้อความใกล้เคียงกับ Facebook */
 }
@@ -50,8 +50,8 @@ section{
   border-radius: 12px;
   padding: 20px;
   margin :10px;
+  color: #ecff58;
 }
-
 
 .input-box input,
 .input-box textarea
@@ -59,7 +59,7 @@ section{
   width: 100%;
   background: #f0f2f5; /* สีพื้นหลังใกล้เคียงกับ Facebook */
   outline: none;
-  border: 1px solid #ccc; /* สีเส้นขอบเป็นสีเทาเข้ม */
+  border: 2px solid #ccc; /* สีเส้นขอบเป็นสีเทาเข้ม */
   border-radius: 10px;
   font-size: 16px;
   color: #1c1e21; /* สีข้อความใกล้เคียงกับ Facebook */
@@ -70,7 +70,7 @@ section{
 
 .input-box input:focus,
 .input-box textarea:focus {
-  border-color: #ccc;/* สีขอบเมื่อได้รับการโฟกัสเป็นสีน้ำเงิน (ใกล้เคียงกับ Facebook) */
+  border-color: #1b9449;/* สีขอบเมื่อได้รับการโฟกัสเป็นสีน้ำเงิน (ใกล้เคียงกับ Facebook) */
 }
 
 
@@ -93,10 +93,10 @@ button {
 #selector {
   background: linear-gradient(135deg, #dcd90e, #f0f0f0);
   outline: none;
-  border: 1px solid #ccc;
+  border: 2px solid #d7d3d3;
   border-radius: 10px;
   font-size: 16px;
-  color: #1c1e21;
+  color: #131514;
   padding: 10px 10px 10px 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   transition: background 0.3s ease;

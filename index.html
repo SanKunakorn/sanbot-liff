@@ -87,8 +87,8 @@
     <section id="formidcard">
       <div class="input-box">
         <div class="row">
-          <input type="text" id="txtid" placeholder="เลขประจำตัวประชาชน" maxlength="13">
-          <p id="idcheck"></p>
+        <input type="text" id="txtid" placeholder="เลขประจำตัวประชาชน" maxlength="13">
+        <p id="idcheck"></p>
         </div>
         <button id="btnidcheck">ตรวจสอบ</button>
       </div>
@@ -102,24 +102,32 @@
   <script>
 
     document.addEventListener("DOMContentLoaded", function () {
-
       document.getElementById("btnsendrp").addEventListener("click", function () {
         sendMessagebot(settext());
       });
 
       document.getElementById("btnbotcheckip").addEventListener("click", function () {
         var ip = document.getElementById("txtkey").value;
-        if(ip!=''){
-          sendMessagebot('Ip#' + ip)
+        if (ip != '') {
+          sendMessagebot('Ip#' + ip);
         }
-        else{
+        else {
           alert('กรุณากรอก IP Address ให้ถูกต้อง');
         }
       });
 
       document.getElementById("btnbotsendip").addEventListener("click", function () {
-        fetchDataAndSendMessage()
+       
       });
+
+      document.getElementById("btnidcheck").addEventListener("click", function () {
+        var thaiID = document.getElementById("txtid").value;
+        if (validateThaiID(thaiID)) {
+          sendMessagebot('Id#' + thaiID);
+        } else {
+          alert('กรุณากรอกหมายเลขบัตรประชาชนให้ถูกต้อง');
+        }
+      }); 
 
       document.getElementById("txtid").addEventListener("input", function () {
         var thaiID = document.getElementById("txtid").value;
@@ -131,21 +139,12 @@
         }
       });
 
-      document.getElementById("btnidcheck").addEventListener("click", function () {
-        var thaiID = document.getElementById("txtid").value;
-        if (validateThaiID(thaiID)) {
-          sendMessagebot('Id#' + thaiID);
-        } else {
-          alert('กรุณากรอกหมายเลขบัตรประชาชนให้ถูกต้อง');
-        }
-      });
-
     });
+
   </script>
 
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
   <script>
-
     async function shareMessage(message) {
       const result = await liff.shareTargetPicker([
         {
@@ -167,6 +166,8 @@
       }
     }
 
+
+/*
     async function fetchDataAndSendMessage() {
       try {
         const userInput = document.getElementById("txtkey").value;
@@ -289,6 +290,7 @@
       }
 
 
+
       try {
         // เรียกใช้ LIFF API เพื่อส่งข้อความ
         await liff.sendMessages([flexMessage]);
@@ -298,7 +300,7 @@
         alert("Error occurred while trying to send message:", error);
       }
     }
-
+*/
 
     async function sendMessagebot(message) {
       try {
