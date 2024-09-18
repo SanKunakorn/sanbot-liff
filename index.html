@@ -102,34 +102,44 @@
   <script>
 
     document.addEventListener("DOMContentLoaded", function () {
+
       document.getElementById("btnsendrp").addEventListener("click", function () {
         sendMessagebot(settext());
       });
 
-
       document.getElementById("btnbotcheckip").addEventListener("click", function () {
-        var thaiID = document.getElementById("txtkey").value;
-        sendMessagebot('Ip#'+thaiID)
+        var ip = document.getElementById("txtkey").value;
+        if(ip!=''){
+          sendMessagebot('Ip#' + ip)
+        }
+        else{
+          alert('กรุณากรอก IP Address ให้ถูกต้อง');
+        }
       });
 
       document.getElementById("btnbotsendip").addEventListener("click", function () {
         fetchDataAndSendMessage()
       });
 
-
-
       document.getElementById("txtid").addEventListener("input", function () {
         var thaiID = document.getElementById("txtid").value;
         var resultElement = document.getElementById("idcheck");
         if (validateThaiID(thaiID)) {
           resultElement.innerText = "✅";
-          document.getElementById("btnidcheck").addEventListener("click", function () {
-            sendMessagebot('Id#'+ thaiID)
-          });
         } else {
           resultElement.innerText = "❌";
         }
       });
+
+      document.getElementById("btnidcheck").addEventListener("click", function () {
+        var thaiID = document.getElementById("txtid").value;
+        if (validateThaiID(thaiID)) {
+          sendMessagebot('Id#' + thaiID);
+        } else {
+          alert('กรุณากรอกหมายเลขบัตรประชาชนให้ถูกต้อง');
+        }
+      });
+
     });
   </script>
 
@@ -248,7 +258,7 @@
                 "action": {
                   "type": "uri",
                   "label": "ตรวจสอบ",
-                  "uri": "http://linecorp.com/"+message
+                  "uri": "http://linecorp.com/" + message
                 },
                 "style": "link"
               }

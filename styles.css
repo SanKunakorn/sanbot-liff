@@ -37,8 +37,8 @@ header,footer{
   background: #17443a; /* สีพื้นหลังใกล้เคียงกับ Facebook */
   border: 1px solid #dadbdc; /* สีเส้นขอบใกล้เคียงกับ Facebook */
   border-radius: 12px;
-  padding: 20px;
-  margin :10px;
+  /*padding: 20px;
+  margin :10px;*/
   text-align: center;
   color: #dcd90e; /* สีข้อความใกล้เคียงกับ Facebook */
 }
