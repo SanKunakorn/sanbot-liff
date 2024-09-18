@@ -20,16 +20,15 @@
       <h1>
         <p id="displayName"></p>
       </h1>
+    </div>
       <h3>
         <p id="userId"></p>
         <p id="statusMessage"></p>
       </h3>
-    </div>
   </div>
 </header>
 
 <body id="body">
-
   <main>
     <section>
       <div class="row">
@@ -218,8 +217,9 @@
                     "text": title
                   },
                   {
-                    "type": "text",
-                    "text": message
+                    "type": "uri",
+                    "label": title,
+                    "uri": message
                   }
                 ]
               }

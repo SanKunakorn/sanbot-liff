@@ -32,7 +32,18 @@ h3 {
   margin: 20px;
 }
 
-header, section, footer {
+header,footer{
+  width: 95vw; /* ลดขนาดของส่วนขยาย */
+  background: #e1e1e0; /* สีพื้นหลังใกล้เคียงกับ Facebook */
+  border: 1px solid #dadbdc; /* สีเส้นขอบใกล้เคียงกับ Facebook */
+  border-radius: 12px;
+  padding: 20px;
+  margin :10px;
+  text-align: center;
+  color: #1877f2; /* สีข้อความใกล้เคียงกับ Facebook */
+}
+
+section{
   width: 95vw; /* ลดขนาดของส่วนขยาย */
   background: #ffffff; /* สีพื้นหลังใกล้เคียงกับ Facebook */
   border: 1px solid #dadbdc; /* สีเส้นขอบใกล้เคียงกับ Facebook */
@@ -41,10 +52,6 @@ header, section, footer {
   margin :10px;
 }
 
-header, footer {
-  text-align: center;
-  color: #1877f2; /* สีข้อความใกล้เคียงกับ Facebook */
-}
 
 .input-box input,
 .input-box textarea
@@ -84,7 +91,7 @@ button {
 }
 
 #selector {
-  background: linear-gradient(135deg, #ffffff, #f0f0f0);
+  background: linear-gradient(135deg, #fbbd51, #f0f0f0);
   outline: none;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -97,7 +104,7 @@ button {
 }
 
 #selector:hover {
-  background: linear-gradient(135deg, #f0f0f0, #ffffff);
+  background: linear-gradient(135deg, #3daae4, #ffffff);
 }
 
 .circle {
