@@ -80,9 +80,10 @@ section{
   border-radius: 10px;
   font-size: 16px;
   color: #1c1e21; /* สีข้อความใกล้เคียงกับ Facebook */
-  padding: 5px 10px 5px 10px;  /*TRBL*/
+  padding: 10px 20px 10px 20px;  /*TRBL*/
   margin-bottom: 10px;
   transition: border-color 0.3s ease;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .input-box input:focus,
