@@ -12,75 +12,108 @@ body {
   align-items: center;
   min-height: 100vh;
   max-width: 100vw;
-  background: #a4babb; /* สีพื้นหลังใกล้เคียงกับ Facebook */
+  background: #a4babb;
+  /* สีพื้นหลังใกล้เคียงกับ Facebook */
   position: relative;
+  margin: 10px;
+  font-size: 18px;
+}
+
+
+h1 {
+  font-size: 30px;
+  /* ลดขนาดของตัวหัวหรือส่วนขยาย */
+  text-align: center;
+  color: #e2df0e;
+  /* สีข้อความใกล้เคียงกับ Facebook */
+  font-weight: 600;
   margin: 10px;
 }
 
-h1{
-  font-size: 30px; /* ลดขนาดของตัวหัวหรือส่วนขยาย */
-  text-align: center;
-  color: #e2df0e; /* สีข้อความใกล้เคียงกับ Facebook */
-  font-weight: 600;
-  margin: 20px;
-}
-
 h2 {
-  font-size: 16px; /* ลดขนาดของตัวหัวหรือส่วนขยาย */
+  font-size: 16px;
+  /* ลดขนาดของตัวหัวหรือส่วนขยาย */
   text-align: left;
-  color: #e2df0e; /* สีข้อความใกล้เคียงกับ Facebook */
+  color: #e2df0e;
+  /* สีข้อความใกล้เคียงกับ Facebook */
   font-weight: 600;
-  margin: 20px;
+  margin: 10px;
 }
 
 h3 {
-  font-size: 16px; /* ลดขนาดของตัวหัวหรือส่วนขยาย */
+  font-size: 16px;
+  /* ลดขนาดของตัวหัวหรือส่วนขยาย */
   text-align: center;
-  color: #5f5a5a; /* สีข้อความใกล้เคียงกับ Facebook */
+  color: #5f5a5a;
+  /* สีข้อความใกล้เคียงกับ Facebook */
   font-weight: 400;
   margin: 10px;
 }
 
-header{
-  display: flex;
-  width: 95vw; /* ลดขนาดของส่วนขยาย */
-  background: #17443a; /* สีพื้นหลังใกล้เคียงกับ Facebook */
-  border: 1px solid #dadbdc; /* สีเส้นขอบใกล้เคียงกับ Facebook */
-  border-radius: 12px;
-  padding: 10px;
-  flex-direction: row;
-  justify-content: start;
-  color: #f4f029; /* สีข้อความใกล้เคียงกับ Facebook */
-  text-align: left;
+.text-overflow {
+  max-width: 80vw;
+  /* กำหนดความกว้างของ <p> */
+  white-space: nowrap;
+  /* ไม่ให้ข้อความขึ้นบรรทัดใหม่ */
+  overflow: hidden;
+  /* ซ่อนข้อความที่ล้น */
+  text-overflow: ellipsis;
+  /* เพิ่ม '...' ท้ายข้อความที่ถูกตัด */
 }
 
-footer{
-  width: 95vw; /* ลดขนาดของส่วนขยาย */
+
+header {
+  display: flex;
+  width: 95vw;
+  /* ลดขนาดของส่วนขยาย */
+  background: #17443a;
+  /* สีพื้นหลังใกล้เคียงกับ Facebook */
+  border: 1px solid #dadbdc;
+  /* สีเส้นขอบใกล้เคียงกับ Facebook */
+  border-radius: 12px;
+  padding: 20px;
+  flex-direction: row;
+  justify-content: start;
+  color: #f4f029;
+  /* สีข้อความใกล้เคียงกับ Facebook */
+  text-align: left;
+
+}
+
+footer {
+  width: 95vw;
+  /* ลดขนาดของส่วนขยาย */
   padding: 10px;
   text-align: center;
 }
 
-section{
-  width: 95vw; /* ลดขนาดของส่วนขยาย */
-  background: #ffffff; /* สีพื้นหลังใกล้เคียงกับ Facebook */
-  border: 1px solid #dadbdc; /* สีเส้นขอบใกล้เคียงกับ Facebook */
+section {
+  width: 95vw;
+  /* ลดขนาดของส่วนขยาย */
+  background: #ffffff;
+  /* สีพื้นหลังใกล้เคียงกับ Facebook */
+  border: 1px solid #dadbdc;
+  /* สีเส้นขอบใกล้เคียงกับ Facebook */
   border-radius: 12px;
   padding: 20px;
-  margin :10px;
+  margin: 10px;
   color: #09401c;
 }
 
 .input-box input,
-.input-box textarea
-{
+.input-box textarea {
   width: 100%;
-  background: #f0f2f5; /* สีพื้นหลังใกล้เคียงกับ Facebook */
+  background: #f0f2f5;
+  /* สีพื้นหลังใกล้เคียงกับ Facebook */
   outline: none;
-  border: 2px solid #ccc; /* สีเส้นขอบเป็นสีเทาเข้ม */
+  border: 2px solid #ccc;
+  /* สีเส้นขอบเป็นสีเทาเข้ม */
   border-radius: 10px;
-  font-size: 16px;
-  color: #1c1e21; /* สีข้อความใกล้เคียงกับ Facebook */
-  padding: 10px 20px 10px 20px;  /*TRBL*/
+  font-size: 18px;
+  color: #1c1e21;
+  /* สีข้อความใกล้เคียงกับ Facebook */
+  padding: 10px 20px 10px 20px;
+  /*TRBL*/
   margin-bottom: 10px;
   transition: border-color 0.3s ease;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -88,14 +121,16 @@ section{
 
 .input-box input:focus,
 .input-box textarea:focus {
-  border-color: #1b9449;/* สีขอบเมื่อได้รับการโฟกัสเป็นสีน้ำเงิน (ใกล้เคียงกับ Facebook) */
+  border-color: #1b9449;
+  /* สีขอบเมื่อได้รับการโฟกัสเป็นสีน้ำเงิน (ใกล้เคียงกับ Facebook) */
 }
 
 
 button {
   width: 100%;
   height: 45px;
-  background: #238549; /* สีปุ่มใกล้เคียงกับ Facebook */
+  background: #238549;
+  /* สีปุ่มใกล้เคียงกับ Facebook */
   outline: none;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -119,6 +154,7 @@ button {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   transition: background 0.3s ease;
   width: 100%;
+  font-size: 18px;
 }
 
 #selector:hover {
@@ -127,7 +163,7 @@ button {
 
 .circle {
   width: 100px;
-  height: 100px;
+  height: auto;
   border-radius: 50%;
   overflow: hidden;
   border: 1px solid #dadbdc;
@@ -141,5 +177,25 @@ button {
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
-  gap: 10px; /* เพิ่มระยะห่างระหว่าง items */
+  gap: 10px;
+  /* เพิ่มระยะห่างระหว่าง items */
+}
+
+
+@media (max-width: 600px) {
+  .text-overflow {
+    max-width: 60vw;
+    /* กำหนดความกว้างของ <p> */
+    white-space: nowrap;
+    /* ไม่ให้ข้อความขึ้นบรรทัดใหม่ */
+    overflow: hidden;
+    /* ซ่อนข้อความที่ล้น */
+    text-overflow: ellipsis;
+    /* เพิ่ม '...' ท้ายข้อความที่ถูกตัด */
+  }
+
+  
+
+
+
 }
