@@ -125,7 +125,7 @@
         var ip = document.getElementById("txtip").value;
         if (ip != '') {
           //sendMessagebot('Ip#' + ip);
-          sendIPToLIFF(ip)
+          sendMessagebot('Ip#'+$ip)
         }
         else {
           alert('กรุณากรอก IP Address ให้ถูกต้อง');
@@ -239,34 +239,6 @@
       }
     }
 
-// การเรียกฟังก์ชัน getIPFromAPI และส่งผลลัพธ์ไปยัง liff
-async function sendIPToLIFF(userip) {
-  try {
-    // เรียกข้อมูล IP
-    const ipInfo = await getIPFromAPI(userip);
-
-    // ตรวจสอบว่า LIFF ถูกโหลดสำเร็จหรือยัง
-    if (typeof liff !== 'undefined') {
-      await liff.init({ liffId: '2004593216-XbA9wj26' }); // ใส่ LIFF ID ของคุณ
-
-      // ส่งข้อความกลับไปยังแชท
-      await liff.sendMessages([
-        {
-          type: 'text',
-          text: ipInfo
-        }
-      ]);
-      alert('ส่งข้อความสำเร็จ:', ipInfo);
-    } else {
-      alert.error('LIFF ไม่พร้อมใช้งาน');
-    }
-  } catch (error) {
-    alert.error('เกิดข้อผิดพลาด:', error.message);
-  }
-}
-
-// ตัวอย่างการเรียกใช้งาน
-
 
     function logOut() {
       liff.logout()
@@ -310,7 +282,7 @@ async function sendIPToLIFF(userip) {
       try {
         // Initialize LIFF
         await liff.init({ liffId: "2004593216-XbA9wj26" }).then(() => {
-          // ,withLoginOnExternalBrowser: true
+          //withLoginOnExternalBrowser: true,
           handleLogin();
 
           liff.ready.then(() => {
