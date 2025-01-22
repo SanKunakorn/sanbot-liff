@@ -47,37 +47,3 @@ function settext() {
   return message;
 }
 
-// ฟังก์ชันสำหรับดึงข้อมูล IP
-async function getIPFromAPI(userip) {
-  try {
-    const apiUrl = `http://ip-api.com/json/${userip}`;
-    const response = await fetch(apiUrl);
-
-    if (response.ok) {
-      const data = await response.json();
-
-      if (data.status === "success") {
-        const ipResult = [
-          `IP Address: ${data.query}`,
-          `📍ประเทศ: ${data.country} (${data.countryCode})`,
-          `📍พื้นที่: ${data.region} (${data.regionName})`,
-          `📍เมือง: ${data.city}`,
-          `📍Timezone: ${data.timezone}`,
-          `📍ผู้ให้บริการ: ${data.isp}`,
-          `📍Org: ${data.org}`,
-          `📍As: ${data.as}`,
-          `📍Google Maps: https://maps.google.com?q=${data.lat},${data.lon}`
-        ].join('\n');
-
-        return ipResult;
-      } else {
-        return `ไม่สามารถดึงข้อมูล IP ได้: ${data.message}`;
-      }
-    } else {
-      return `ไม่สามารถเชื่อมต่อ API ได้: Response code ${response.status}`;
-    }
-  } catch (error) {
-    return `เกิดข้อผิดพลาด: ${error.message}`;
-  }
-}
-

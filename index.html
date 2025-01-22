@@ -30,7 +30,7 @@
     </div>
     <h2>
       <!--<p id="userId"></p>-->
-      <!-- <p id="statusMessage"></p>-->
+      <!--<p id="statusMessage"></p>-->
       <!-- <p id="email"></p>-->
       <!--<p id="os"></p>-->
       <!--<p id="inapp"></p>-->
@@ -110,6 +110,54 @@
 
   <script>
 
+
+ // ฟังก์ชันดึงข้อมูล IP
+ async function getIPFromAPI(userip) {
+      try {
+        const apiUrl = `http://ip-api.com/json/${userip}`;
+        const response = await fetch(apiUrl);
+
+        if (response.ok) {
+          const data = await response.json();
+
+          if (data.status === "success") {
+            return [
+              `IP Address: ${data.query}`,
+              `📍ประเทศ: ${data.country} (${data.countryCode})`,
+              `📍พื้นที่: ${data.region} (${data.regionName})`,
+              `📍เมือง: ${data.city}`,
+              `📍Timezone: ${data.timezone}`,
+              `📍ผู้ให้บริการ: ${data.isp}`,
+              `📍Org: ${data.org}`,
+              `📍As: ${data.as}`,
+              `📍Google Maps: <a href="https://maps.google.com?q=${data.lat},${data.lon}" target="_blank">ดูในแผนที่</a>`
+            ].join('<br>');
+          } else {
+            return `ไม่สามารถดึงข้อมูล IP ได้: ${data.message}`;
+          }
+        } else {
+          return `ไม่สามารถเชื่อมต่อ API ได้: Response code ${response.status}`;
+        }
+      } catch (error) {
+        return `เกิดข้อผิดพลาด: ${error.message}`;
+      }
+    }
+
+    // ฟังก์ชันสำหรับแสดงข้อมูล IP ในหน้า LIFF
+    async function displayIPInfo(userip) {
+      //const ipInfoElement = document.getElementById('statusMessage');
+      // ดึงข้อมูล IP
+      const ipInfo = await getIPFromAPI(userip); // เปลี่ยนเป็น IP ที่ต้องการ
+      //ipInfoElement.innerHTML = ipInfo;
+      sendMessagebot(ipInfo);
+    }
+
+
+
+
+
+
+
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("btnsendrp").addEventListener("click", function () {
         sendMessagebot(settext());
@@ -124,8 +172,8 @@
       document.getElementById("btncheckip").addEventListener("click", function () {
         var ip = document.getElementById("txtip").value;
         if (ip != '') {
-          //sendMessagebot('Ip#' + ip);
-          sendMessagebot('Ip#'+$ip)
+          //sendMessagebot('Ip#' + ip)
+          displayIPInfo(ip);
         }
         else {
           alert('กรุณากรอก IP Address ให้ถูกต้อง');
@@ -314,7 +362,7 @@
       }
       SelectedPage()
     }
-    
+
     initializeLiff()
   </script>
 </body>
