@@ -19,7 +19,8 @@
         <img id="pictureUrl" style="width:100%;">
       </div>
       <h1>
-        <p class="text-overflow" id="displayName">Loadingggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg...</p>
+        <p class="text-overflow" id="displayName">
+          Loading...</p>
       </h1>
     </div>
 
@@ -27,14 +28,14 @@
       <span id="btnLogin" onclick="liff.login()" style="cursor: pointer;">Log In</span>
       <span id="btnLogOut" onclick="logOut()" style="cursor: pointer;">Log Out</span>
     </div>
-
     <h2>
-     <!--<p id="userId"></p>--> 
-     <!-- <p id="statusMessage"></p>-->
-     <!-- <p id="email"></p>-->
-     <!--<p id="os"></p>-->
-     <!--<p id="inapp"></p>-->
+      <!--<p id="userId"></p>-->
+      <!-- <p id="statusMessage"></p>-->
+      <!-- <p id="email"></p>-->
+      <!--<p id="os"></p>-->
+      <!--<p id="inapp"></p>-->
     </h2>
+
   </div>
 </header>
 
@@ -123,7 +124,8 @@
       document.getElementById("btncheckip").addEventListener("click", function () {
         var ip = document.getElementById("txtip").value;
         if (ip != '') {
-          sendMessagebot('Ip#' + ip);
+          //sendMessagebot('Ip#' + ip);
+          sendIPToLIFF(ip)
         }
         else {
           alert('กรุณากรอก IP Address ให้ถูกต้อง');
@@ -152,7 +154,7 @@
 
   </script>
 
-  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.25.1/sdk.js"></script>
   <script>
     async function shareMessage(message) {
       const result = await liff.shareTargetPicker([
@@ -174,9 +176,6 @@
         }
       }
     }
-
-
-   
 
     async function sendMessagebot(message) {
       try {
@@ -240,12 +239,40 @@
       }
     }
 
+const fetch = require('node-fetch');
+// การเรียกฟังก์ชัน getIPFromAPI และส่งผลลัพธ์ไปยัง liff
+async function sendIPToLIFF(userip) {
+  try {
+    // เรียกข้อมูล IP
+    const ipInfo = await getIPFromAPI(userip);
+
+    // ตรวจสอบว่า LIFF ถูกโหลดสำเร็จหรือยัง
+    if (typeof liff !== 'undefined') {
+      await liff.init({ liffId: '2004593216-XbA9wj26' }); // ใส่ LIFF ID ของคุณ
+
+      // ส่งข้อความกลับไปยังแชท
+      await liff.sendMessages([
+        {
+          type: 'text',
+          text: ipInfo
+        }
+      ]);
+      alert('ส่งข้อความสำเร็จ:', ipInfo);
+    } else {
+      alert.error('LIFF ไม่พร้อมใช้งาน');
+    }
+  } catch (error) {
+    alert.error('เกิดข้อผิดพลาด:', error.message);
+  }
+}
+
+// ตัวอย่างการเรียกใช้งาน
+
 
     function logOut() {
       liff.logout()
       window.location.reload()
     }
-
 
     async function getUserProfile() {
       try {
@@ -258,12 +285,9 @@
 
         pictureUrl.src = profile.pictureUrl;
         displayName.innerHTML = profile.displayName;
-        userId.innerHTML = profile.userId ??'';
+        userId.innerHTML = profile.userId ?? '';
         email.innerHTML = liff.getDecodedIDToken().email ?? '';
         statusMessage.innerHTML = profile.statusMessage ?? '';
-        
-
-
       } catch (error) {
         console.error("Error occurred while trying to get user profile:", error);
       }
@@ -319,7 +343,7 @@
       }
       SelectedPage()
     }
-
+    
     initializeLiff()
   </script>
 </body>
