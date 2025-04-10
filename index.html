@@ -112,7 +112,7 @@
   <script>
 
 
- 
+
 
     // ฟังก์ชันสำหรับแสดงข้อมูล IP ในหน้า LIFF
     async function displayIPInfo(userip) {
@@ -126,7 +126,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("btnsendrp").addEventListener("click", function () {
-        sendMessagebot(settext());
+        handleSend()
       });
 
 
@@ -191,6 +191,40 @@
       }
     }
 
+
+
+    async function sendMapQr({ message, mapLink, qrurl }) {
+      try {
+        await liff.sendMessages([
+          {
+            type: 'text',
+            text: message
+          },
+          {
+            type: 'location',
+            title: 'ตำแหน่งที่แจ้ง',
+            address: 'ดูบน Google Maps',
+            latitude: parseFloat(mapLink.split('=')[1].split(',')[0]),
+            longitude: parseFloat(mapLink.split('=')[1].split(',')[1])
+          },
+          {
+            type: 'image',
+            originalContentUrl: qrurl,
+            previewImageUrl: qrurl
+          }
+        ]);
+        alert("ส่งข้อความสำเร็จ!");
+        liff.closeWindow();
+      } catch (error) {
+        alert("เกิดข้อผิดพลาดในการส่งข้อความ: " + error);
+      }
+    }
+
+    async function handleSend() {
+      const content = settext();
+      await sendMapQr(content);
+    }
+
     async function sendMessagebot(message) {
       try {
         // เรียกใช้ LIFF API เพื่อส่งข้อความ
@@ -240,7 +274,7 @@
         case "sanapp":
           //window.location.href = 'https://san-all.web.app';
           liff.openWindow({
-            url: 'https://san-all.web.app',
+            url: 'https://san-np.web.app',
             external: true
           });
           break;

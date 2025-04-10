@@ -35,17 +35,25 @@ function validateThaiID(id) {
 function settext() {
   let user = document.getElementById("user").value;
   let datetimeInput = document.getElementById("datetime");
-  let datetime = datetimeInput.value ? new Date(datetimeInput.value) : new Date(); // Check if datetime input is empty, if yes, use current date
+  let datetime = datetimeInput.value ? new Date(datetimeInput.value) : new Date();
   let detail = document.getElementById("detail").value;
   let latlong = document.getElementById("latlong").value;
-  // Options for Thai locale
+
   let options = { year: 'numeric', month: 'short', day: 'numeric' };
-  // Convert the date to Thai locale
   let thaiDate = datetime.toLocaleDateString('th-TH', options);
-  let message = 'เรียน ผู้บังคับบัญชา' + "\n-------------------------" + '\n     วันนี้( ' + thaiDate + ' )' + "\n" + user + ' ' + detail + "\n แผนที่: https://maps.google.com?q=" + latlong + '\n   ' + "     จึงเรียนมาเพื่อโปรดทราบ";
-  //alert(`${message}`)
-  return message;
+
+  let mapLink = "https://maps.google.com?q=" + latlong;
+  let qrurl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(mapLink);
+
+  let message = 'เรียน ผู้บังคับบัญชา\n-------------------------\n     วันนี้( ' + thaiDate + ' )\n' + user + ' ' + detail + '\nแผนที่: ' + mapLink + '\n     จึงเรียนมาเพื่อโปรดทราบ';
+
+  return { message, mapLink, qrurl };
 }
+
+
+
+
+
 
 // ฟังก์ชันดึงข้อมูล IP
 async function getIPFromAPI(userip) {
