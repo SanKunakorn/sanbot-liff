@@ -121,7 +121,7 @@
 
   <script>
     async function showResult() {
-      const { message, mapLink, qrurl, mapimg } = await settext();
+      const { message, mapLink, qrurl, mapId, mapUrl } = await settext();
 
       // แสดงข้อมูลในหน้าเว็บ
       document.getElementById("showResult").style.display = "block";
@@ -129,7 +129,7 @@
       document.getElementById("mapLink").href = mapLink;
       document.getElementById("mapLink").textContent = mapLink;
       document.getElementById("qrImage").src = qrurl;
-      document.getElementById("map-img").src = 'https://lh3.googleusercontent.com/d/' + mapimg;
+      document.getElementById("map-img").src = 'https://lh3.googleusercontent.com/d/' + mapId;
     }
   </script>
 
@@ -152,7 +152,8 @@
 
 
       document.getElementById("btnShare").addEventListener("click", function () {
-        shareMessage(settext())
+        let content = settext();
+        shareMessage(content)
       });
 
 
@@ -191,12 +192,31 @@
 
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.25.1/sdk.js"></script>
   <script>
-    async function shareMessage(message) {
+    async function shareMessage(message,qrurl,mapUrl) {
       const result = await liff.shareTargetPicker([
         {
-          type: "text",
-          text: message,// ข้อความที่ต้องการแชร์
+          type: 'text',
+          text: message
         },
+
+        /*{
+          type: 'location',
+          title: 'ตำแหน่งที่แจ้ง',
+          address: 'ดูบน Google Maps',
+          latitude: parseFloat(mapLink.split('=')[1].split(',')[0]),
+          longitude: parseFloat(mapLink.split('=')[1].split(',')[1])
+        },*/
+
+        {
+          type: 'image',
+          originalContentUrl: qrurl,
+          previewImageUrl: qrurl
+        },
+        {
+          type: 'image',
+          originalContentUrl: mapUrl,
+          previewImageUrl: mapUrl
+        }
       ])
 
       if (result) {
@@ -212,11 +232,7 @@
       }
     }
 
-
-
-
-    //async function sendMapQr({ message, mapLink, qrurl, mapimg }) {
-      async function sendMapQr({ message, qrurl, mapimg }) {
+    async function sendMapQr({ message, qrurl, mapUrl }) {
       try {
         await liff.sendMessages([
           {
@@ -239,19 +255,19 @@
           },
           {
             type: 'image',
-            originalContentUrl:"https://drive.google.com/uc?export=view&id=" + mapimg,
-            previewImageUrl: "https://drive.google.com/uc?export=view&id=" + mapimg
+            originalContentUrl: mapUrl,
+            previewImageUrl: mapUrl
           }
         ]);
         alert("ส่งข้อความสำเร็จ!");
-        liff.closeWindow();
+        //liff.closeWindow();
       } catch (error) {
         alert("เกิดข้อผิดพลาดในการส่งข้อความ: " + error);
       }
     }
 
     async function handleSend() {
-      const content = settext();
+      let content = settext();
       await sendMapQr(content);
     }
 

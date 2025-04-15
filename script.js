@@ -13,14 +13,17 @@ function getLocation() {
 }
 
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzHh2whTRjedoCy-5NPwL1gvuCqSDLASRIFdjurzTQOBJux4bI7rTj8wUh5dWWn6xJi-Q/exec"; // แทนที่ด้วย URL จริงจาก GAS
-let mapID = '';
+let mapId = '';
+let mapUrl='';
 // ดึงแผนที่จาก GAS
 async function loadMap(lat,lon) {
   const response = await fetch(`${GAS_URL}?getMap=true&latitude=${lat}&longitude=${lon}`);
   const data = await response.json();
-  if (data.fileId) {
-    //document.getElementById("map-img").src = data.fileUrl;
-    return data.fileId;
+  if (data) {
+    document.getElementById("map-img").src = data.fileUrl;
+    mapId = data.fileId;
+    mapUrl = data.fileUrl;
+    return {mapId,mapUrl};
   }
   return '';
 }
@@ -59,9 +62,8 @@ async function settext() {
     // 👇 รอให้โหลดภาพแผนที่เสร็จ
   var latitude= parseFloat(latlong.split(',')[0])
   var longitude= parseFloat(latlong.split(',')[1])
-  let mapimg = await loadMap(latitude,longitude);
-
-  return { message, mapLink, qrurl, mapimg };
+  const { mapId, mapUrl } = await loadMap(latitude,longitude);
+  return { message, mapLink, qrurl,mapId,mapUrl};
 }
 
 
