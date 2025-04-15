@@ -215,7 +215,8 @@
 
 
 
-    async function sendMapQr({ message, mapLink, qrurl, mapimg }) {
+    //async function sendMapQr({ message, mapLink, qrurl, mapimg }) {
+      async function sendMapQr({ message, qrurl, mapimg }) {
       try {
         await liff.sendMessages([
           {
@@ -250,7 +251,6 @@
     }
 
     async function handleSend() {
-
       const content = settext();
       await sendMapQr(content);
     }

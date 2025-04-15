@@ -14,9 +14,8 @@ function getLocation() {
 
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzHh2whTRjedoCy-5NPwL1gvuCqSDLASRIFdjurzTQOBJux4bI7rTj8wUh5dWWn6xJi-Q/exec"; // แทนที่ด้วย URL จริงจาก GAS
 let mapID = '';
-
 // ดึงแผนที่จาก GAS
-async function loadMap() {
+async function loadMap(lat,lon) {
   const response = await fetch(`${GAS_URL}?getMap=true&latitude=${lat}&longitude=${lon}`);
   const data = await response.json();
   if (data.fileId) {
@@ -58,7 +57,9 @@ async function settext() {
   let qrurl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(mapLink);
   let message = 'เรียน ผู้บังคับบัญชา\n-------------------------\n     วันนี้( ' + thaiDate + ' )\n' + user + ' ' + detail + '\nแผนที่: ' + mapLink + '\n     จึงเรียนมาเพื่อโปรดทราบ';
     // 👇 รอให้โหลดภาพแผนที่เสร็จ
-    let mapimg = await loadMap();
+  var latitude= parseFloat(latlong.split(',')[0])
+  var longitude= parseFloat(latlong.split(',')[1])
+  let mapimg = await loadMap(latitude,longitude);
 
   return { message, mapLink, qrurl, mapimg };
 }
