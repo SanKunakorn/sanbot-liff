@@ -12,6 +12,20 @@ function getLocation() {
   }
 }
 
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzHh2whTRjedoCy-5NPwL1gvuCqSDLASRIFdjurzTQOBJux4bI7rTj8wUh5dWWn6xJi-Q/exec"; // แทนที่ด้วย URL จริงจาก GAS
+let mapID = '';
+
+// ดึงแผนที่จาก GAS
+async function loadMap() {
+  const response = await fetch(`${GAS_URL}?getMap=true&latitude=${lat}&longitude=${lon}`);
+  const data = await response.json();
+  if (data.fileUrl) {
+    //document.getElementById("map-img").src = data.fileUrl;
+    return data.fileId;
+  }
+  return '';
+}
+
 function validateThaiID(id) {
   // ตรวจสอบความยาวของเลขบัตรประชาชน
   if (id.length !== 13) {
@@ -32,22 +46,21 @@ function validateThaiID(id) {
 }
 
 
-function settext() {
+async function settext() {
   let user = document.getElementById("user").value;
   let datetimeInput = document.getElementById("datetime");
   let datetime = datetimeInput.value ? new Date(datetimeInput.value) : new Date();
   let detail = document.getElementById("detail").value;
   let latlong = document.getElementById("latlong").value;
-
   let options = { year: 'numeric', month: 'short', day: 'numeric' };
   let thaiDate = datetime.toLocaleDateString('th-TH', options);
-
   let mapLink = "https://maps.google.com?q=" + latlong;
   let qrurl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(mapLink);
-
   let message = 'เรียน ผู้บังคับบัญชา\n-------------------------\n     วันนี้( ' + thaiDate + ' )\n' + user + ' ' + detail + '\nแผนที่: ' + mapLink + '\n     จึงเรียนมาเพื่อโปรดทราบ';
+    // 👇 รอให้โหลดภาพแผนที่เสร็จ
+    let mapimg = await loadMap();
 
-  return { message, mapLink, qrurl };
+  return { message, mapLink, qrurl, mapimg };
 }
 
 

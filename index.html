@@ -35,7 +35,6 @@
       <!--<p id="os"></p>-->
       <!--<p id="inapp"></p>-->
     </h2>
-
   </div>
 </header>
 
@@ -71,9 +70,20 @@
           <label for="latlong">พิกัดแผนที่:</label>
           <input type="text" id="latlong">
         </form>
+
+        <div id="showResult" style="display: none;">
+          <h3>ตัวอย่าง:</h3>
+          <div id="resultMessage" style="white-space: pre-wrap;"></div>
+          <h3>QR-Code:</h3>
+          <img id="qrImage" width="200">
+          <h3><a id="mapLink" href="#" target="_blank">เปิดแผนที่</a></h3>
+          <h3>ภาพแผนที่:</h3>
+          <img id="map-img" width="200">
+        </div>
+
       </div>
       <div class="row">
-        <button id="btnsettext" onclick="alert(settext())">ตัวอย่าง</button>
+        <button id="btnsettext" onclick="showResult()">แสดงข้อมูล</button>
         <button id="btnsendrp">ส่ง</button>
         <button id="btnShare">แชร์</button>
       </div>
@@ -110,10 +120,21 @@
 
 
   <script>
+    async function showResult() {
+      const { message, mapLink, qrurl, mapimg } = await settext();
+
+      // แสดงข้อมูลในหน้าเว็บ
+      document.getElementById("showResult").style.display = "block";
+      document.getElementById("resultMessage").textContent = message;
+      document.getElementById("mapLink").href = mapLink;
+      document.getElementById("mapLink").textContent = mapLink;
+      document.getElementById("qrImage").src = qrurl;
+      document.getElementById("map-img").src = 'https://lh3.googleusercontent.com/d/' + mapimg;
+    }
+  </script>
 
 
-
-
+  <script>
     // ฟังก์ชันสำหรับแสดงข้อมูล IP ในหน้า LIFF
     async function displayIPInfo(userip) {
       const ipInfoElement = document.getElementById('statusMessage');
@@ -193,24 +214,32 @@
 
 
 
-    async function sendMapQr({ message, mapLink, qrurl }) {
+
+    async function sendMapQr({ message, mapLink, qrurl, mapimg }) {
       try {
         await liff.sendMessages([
           {
             type: 'text',
             text: message
           },
-          {
+
+         /* {
             type: 'location',
             title: 'ตำแหน่งที่แจ้ง',
             address: 'ดูบน Google Maps',
             latitude: parseFloat(mapLink.split('=')[1].split(',')[0]),
             longitude: parseFloat(mapLink.split('=')[1].split(',')[1])
-          },
+          },*/
+
           {
             type: 'image',
             originalContentUrl: qrurl,
             previewImageUrl: qrurl
+          },
+          {
+            type: 'image',
+            originalContentUrl: "https://drive.google.com/uc?id="+mapimg,
+            previewImageUrl: "https://drive.google.com/uc?id="+mapimg
           }
         ]);
         alert("ส่งข้อความสำเร็จ!");
@@ -251,7 +280,6 @@
           document.getElementById("formbot").style.display = "none";
           document.getElementById("formidcard").style.display = "none";
           document.getElementById("formreport").style.display = "block";
-
           let datetimeInput = document.getElementById("datetime");
           // Check if datetime input is empty, if yes, use current date
           let datetime = datetimeInput.value ? new Date(datetimeInput.value) : new Date();
