@@ -223,7 +223,7 @@
             text: message
           },
 
-         /* {
+          /*{
             type: 'location',
             title: 'ตำแหน่งที่แจ้ง',
             address: 'ดูบน Google Maps',
@@ -238,8 +238,8 @@
           },
           {
             type: 'image',
-            originalContentUrl: "https://drive.google.com/uc?id="+mapimg,
-            previewImageUrl: "https://drive.google.com/uc?id="+mapimg
+            originalContentUrl:"https://drive.google.com/uc?export=view&id=" + mapimg,
+            previewImageUrl: "https://drive.google.com/uc?export=view&id=" + mapimg
           }
         ]);
         alert("ส่งข้อความสำเร็จ!");
@@ -250,6 +250,7 @@
     }
 
     async function handleSend() {
+
       const content = settext();
       await sendMapQr(content);
     }

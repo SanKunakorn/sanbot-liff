@@ -19,7 +19,7 @@ let mapID = '';
 async function loadMap() {
   const response = await fetch(`${GAS_URL}?getMap=true&latitude=${lat}&longitude=${lon}`);
   const data = await response.json();
-  if (data.fileUrl) {
+  if (data.fileId) {
     //document.getElementById("map-img").src = data.fileUrl;
     return data.fileId;
   }
