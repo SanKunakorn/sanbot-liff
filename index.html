@@ -149,12 +149,13 @@
       document.getElementById("btnsendrp").addEventListener("click", function () {
         handleSend()
       });
-
-
-      document.getElementById("btnShare").addEventListener("click", function () {
-        let content = settext();
-        shareMessage(content)
+      document.getElementById("btnShare").addEventListener("click", function (){
       });
+
+     async function sharehandle(){
+        let content = await settext();
+        shareMessage(content)
+      }
 
 
       document.getElementById("btncheckip").addEventListener("click", function () {
@@ -260,15 +261,15 @@
           }
         ]);
         alert("ส่งข้อความสำเร็จ!");
-        //liff.closeWindow();
+        liff.closeWindow();
       } catch (error) {
         alert("เกิดข้อผิดพลาดในการส่งข้อความ: " + error);
       }
     }
 
     async function handleSend() {
-      let content = settext();
-      await sendMapQr(content);
+      let content = await settext();
+      sendMapQr(content);
     }
 
     async function sendMessagebot(message) {
