@@ -186,8 +186,35 @@
       document.getElementById("btnsendrp").addEventListener("click", function () {
         handleSend()
       });
-      document.getElementById("btnShare").addEventListener("click", function () {
-        sharehandle();
+
+      document.getElementById("btnShare").addEventListener("click", async function () {
+        Swal.fire({
+        title: 'กรุณารอสักครู่...',
+        text: 'กำลังสร้างแผนที่และส่งข้อมูล',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+      try {
+        const content = await settext();      // โหลดข้อมูล
+        await shareMessage(content.message, content.mapLink, content.qrurl, content.mapUrl);
+        Swal.close();// ปิดแจ้งเตือนเมื่อเสร็จ
+        Swal.fire({
+          icon: 'success',
+          title: 'ส่งข้อมูลสำเร็จ!',
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+      } catch (error) {
+        Swal.close(); // ปิด loading
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: error.message || 'ไม่สามารถส่งข้อมูลได้'
+        });
+      }
       });
 
       document.getElementById("btncheckip").addEventListener("click", async function () {
@@ -257,7 +284,7 @@
   <script>
 
     async function shareMessage(message, mapLink, qrurl, mapUrl) {
-      var result = await liff.shareTargetPicker([
+      const result = await liff.shareTargetPicker([
         {
           type: 'text',
           text: message
@@ -376,37 +403,6 @@
         alert("Error occurred while trying to send message:", error);
       }
     }
-
-    async function sharehandle() {
-      Swal.fire({
-        title: 'กรุณารอสักครู่...',
-        text: 'กำลังสร้างแผนที่และส่งข้อมูล',
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
-      try {
-        const content = await settext();
-       await shareMessage(content);                // ส่งข้อความไป LINE
-        Swal.close();                         // ปิดแจ้งเตือนเมื่อเสร็จ
-        Swal.fire({
-          icon: 'success',
-          title: 'ส่งข้อมูลสำเร็จ!',
-          timer: 2000,
-          showConfirmButton: false
-        });
-      } catch (error) {
-        Swal.close(); // ปิด loading
-        Swal.fire({
-          icon: 'error',
-          title: 'เกิดข้อผิดพลาด',
-          text: error.message || 'ไม่สามารถส่งข้อมูลได้'
-        });
-      }
-    }
-
-
 
     //ตั้งค่าการแสดงผล
     function SelectedPage() {
