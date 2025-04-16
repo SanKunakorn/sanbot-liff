@@ -14,19 +14,50 @@ function getLocation() {
 
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzHh2whTRjedoCy-5NPwL1gvuCqSDLASRIFdjurzTQOBJux4bI7rTj8wUh5dWWn6xJi-Q/exec"; // แทนที่ด้วย URL จริงจาก GAS
 let mapId = '';
-let mapUrl='';
-// ดึงแผนที่จาก GAS
-async function loadMap(lat,lon) {
-  const response = await fetch(`${GAS_URL}?getMap=true&latitude=${lat}&longitude=${lon}`);
-  const data = await response.json();
-  if (data) {
-    document.getElementById("map-img").src = data.fileUrl;
-    mapId = data.fileId;
-    mapUrl = data.fileUrl;
-    return {mapId,mapUrl};
+let mapUrl = '';
+let phonenetwork = '';
+
+async function loadMap(lat, lon) {
+  // ✅ ถ้ามีข้อมูล map อยู่แล้ว ให้ return เลย
+  if (mapUrl && mapId) {
+    //console.log("ใช้ข้อมูลแผนที่ที่โหลดไว้แล้ว");
+    return { mapId, mapUrl };
   }
-  return '';
+  else {
+    const response = await fetch(`${GAS_URL}?getMap=true&latitude=${lat}&longitude=${lon}`);
+    const data = await response.json();
+    if (data && data.fileUrl) {
+      // ✅ บันทึกค่าที่ได้
+      mapId = data.fileId;
+      mapUrl = data.fileUrl;
+    } 
+    return { mapId, mapUrl };
+  }
 }
+
+
+async function Checknetwork(phoneno) {
+  try {
+    const response = await fetch(`${GAS_URL}?phone=${phoneno}`);
+
+    if (!response.ok) {
+      return '❌ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
+    }
+
+    const text = await response.text(); // ✅ อ่านเป็นข้อความธรรมดา
+
+    if (text.trim()) {
+      return `📞 ผลการตรวจสอบ:\n${text}`;
+    } else {
+      return 'ไม่พบข้อมูลเบอร์โทรนี้';
+    }
+
+  } catch (error) {
+    return '⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อ API';
+  }
+}
+
+
 
 function validateThaiID(id) {
   // ตรวจสอบความยาวของเลขบัตรประชาชน
@@ -59,17 +90,14 @@ async function settext() {
   let mapLink = "https://maps.google.com?q=" + latlong;
   let qrurl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(mapLink);
   let message = 'เรียน ผู้บังคับบัญชา\n-------------------------\n     วันนี้( ' + thaiDate + ' )\n' + user + ' ' + detail + '\nแผนที่: ' + mapLink + '\n     จึงเรียนมาเพื่อโปรดทราบ';
-    // 👇 รอให้โหลดภาพแผนที่เสร็จ
-  var latitude= parseFloat(latlong.split(',')[0])
-  var longitude= parseFloat(latlong.split(',')[1])
-  const { mapId, mapUrl } = await loadMap(latitude,longitude);
-  return { message, mapLink, qrurl,mapId,mapUrl};
+  // 👇 รอให้โหลดภาพแผนที่เสร็จ
+  var latitude = parseFloat(latlong.split(',')[0])
+  var longitude = parseFloat(latlong.split(',')[1])
+
+  const { mapId, mapUrl } = await loadMap(latitude, longitude);
+
+  return { message, mapLink, qrurl, mapId, mapUrl };
 }
-
-
-
-
-
 
 // ฟังก์ชันดึงข้อมูล IP
 async function getIPFromAPI(userip) {
