@@ -255,6 +255,7 @@
 
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.25.1/sdk.js"></script>
   <script>
+
     async function shareMessage(message, mapLink, qrurl, mapUrl) {
       var result = await liff.shareTargetPicker([
         {
@@ -387,7 +388,7 @@
       });
       try {
         const content = await settext();
-        shareMessage(content);                // ส่งข้อความไป LINE
+       await shareMessage(content);                // ส่งข้อความไป LINE
         Swal.close();                         // ปิดแจ้งเตือนเมื่อเสร็จ
         Swal.fire({
           icon: 'success',
