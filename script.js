@@ -30,7 +30,7 @@ async function loadMap(lat, lon) {
       // ✅ บันทึกค่าที่ได้
       mapId = data.fileId;
       mapUrl = data.fileUrl;
-    } 
+    }
     return { mapId, mapUrl };
   }
 }
@@ -130,4 +130,401 @@ async function getIPFromAPI(userip) {
     return `เกิดข้อผิดพลาด: ${error.message}`;
   }
 }
+
+
+
+async function showResult() {
+  Swal.fire({
+    title: 'กรุณารอสักครู่...',
+    text: 'กำลังสร้างแผนที่และส่งข้อมูล',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
+  try {
+    const { message, mapLink, qrurl, mapId, mapUrl } = await settext();
+    // แสดงข้อมูลในหน้าเว็บ
+    document.getElementById("showResultmap").style.display = "block";
+    document.getElementById("resultMessage").textContent = message;
+    document.getElementById("mapLink").href = mapLink;
+    document.getElementById("mapLink").textContent = mapLink;
+    document.getElementById("qrImage").src = qrurl;
+    document.getElementById("map-img").src = 'https://lh3.googleusercontent.com/d/' + mapId;
+    Swal.close(); // ปิดแจ้งเตือนเมื่อเสร็จ
+    Swal.fire({
+      icon: 'success',
+      title: 'ส่งข้อมูลสำเร็จ!',
+      timer: 2000,
+      showConfirmButton: false
+    });
+  } catch (error) {
+    Swal.close(); // ปิด loading
+    Swal.fire({
+      icon: 'error',
+      title: 'เกิดข้อผิดพลาด',
+      text: error.message || 'ไม่สามารถส่งข้อมูลได้'
+    });
+  }
+}
+
+//ฟังก์ชันสำหรับแสดงข้อมูลในหน้า LIFF
+function displayInfo(info) {
+  document.getElementById("result").style = 'block';
+  document.getElementById("statusMessage").innerHTML = info;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("btnsendrp").addEventListener("click", function () {
+    handleSend()
+  });
+
+  document.getElementById("btnShare").addEventListener("click", async function () {
+    Swal.fire({
+      title: 'กรุณารอสักครู่...',
+      text: 'กำลังสร้างแผนที่และส่งข้อมูล',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+    try {
+      const content = await settext();      // โหลดข้อมูล
+      await shareMessage(content.message, content.mapLink, content.qrurl, content.mapUrl);
+      Swal.close();// ปิดแจ้งเตือนเมื่อเสร็จ
+      Swal.fire({
+        icon: 'success',
+        title: 'ส่งข้อมูลสำเร็จ!',
+        timer: 2000,
+        showConfirmButton: false
+      });
+
+    } catch (error) {
+      Swal.close(); // ปิด loading
+      Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: error.message || 'ไม่สามารถส่งข้อมูลได้'
+      });
+    }
+  });
+
+  document.getElementById("btncheckip").addEventListener("click", async function () {
+    var ip = document.getElementById("txtip").value;
+    if (ip !== '') {
+      try {
+        const ipInfo = await getIPFromAPI(ip); // ได้ข้อมูลจาก API
+        displayInfo(ipInfo);                   // ส่งค่าเข้า displayInfo อย่างถูกต้อง
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: error.message || 'ไม่สามารถดึงข้อมูล IP ได้'
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณากรอก IP Address ให้ถูกต้อง'
+      });
+    }
+  });
+
+  document.getElementById("btnidcheck").addEventListener("click", function () {
+    var thaiID = document.getElementById("txtid").value;
+    if (validateThaiID(thaiID)) {
+      sendMessagebot('Id#' + thaiID);
+    } else {
+      alert('กรุณากรอกหมายเลขบัตรประชาชนให้ถูกต้อง');
+    }
+  });
+
+  document.getElementById("txtid").addEventListener("input", function () {
+    var thaiID = document.getElementById("txtid").value;
+    var resultElement = document.getElementById("idcheck");
+    if (validateThaiID(thaiID)) {
+      resultElement.innerText = "✅";
+    } else {
+      resultElement.innerText = "❌";
+    }
+  });
+
+  document.getElementById("btncheckphone").addEventListener("click", async function () {
+    const phone = document.getElementById("txtphone").value;
+    if (phone !== '') {
+      try {
+        const info = await Checknetwork(phone);
+        displayInfo(info); // ส่งค่าเข้า displayInfo อย่างถูกต้อง
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: error.message || 'ไม่สามารถดึงข้อมูลเครือข่ายได้'
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณากรอกหมายเลขโทรศัพท์ให้ถูกต้อง'
+      });
+    }
+  });
+});
+
+
+async function shareMessage(message, mapLink, qrurl, mapUrl) {
+  const result = await liff.shareTargetPicker([
+    {
+      type: 'text',
+      text: message
+    },
+    {
+      type: 'location',
+      title: 'ตำแหน่งที่แจ้ง',
+      address: 'ดูบน Google Maps',
+      latitude: parseFloat(mapLink.split('=')[1].split(',')[0]),
+      longitude: parseFloat(mapLink.split('=')[1].split(',')[1])
+    },
+    {
+      type: 'image',
+      originalContentUrl: qrurl,
+      previewImageUrl: qrurl
+    },
+    {
+      type: 'image',
+      originalContentUrl: mapUrl,
+      previewImageUrl: mapUrl
+    }
+  ])
+
+  if (result) {
+    alert(`[${result.status}] Message sent!`)
+  } else {
+    const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split('.');
+    if (minorVer === undefined) {
+      alert('ShareTargetPicker was canceled in external browser')
+    }
+    if (parseInt(majorVer) >= 10 && parseInt(minorVer) >= 10 && parseInt(patchVer) > 0) {
+      alert('ShareTargetPicker was canceled in LINE app')
+    }
+  }
+}
+
+async function sendMapQr({ message, qrurl, mapUrl }) {
+  try {
+    await liff.sendMessages([
+      {
+        type: 'text',
+        text: message
+      },
+      /*{
+        type: 'location',
+        title: 'ตำแหน่งที่แจ้ง',
+        address: 'ดูบน Google Maps',
+        latitude: parseFloat(mapLink.split('=')[1].split(',')[0]),
+        longitude: parseFloat(mapLink.split('=')[1].split(',')[1])
+      },*/
+      {
+        type: 'image',
+        originalContentUrl: qrurl,
+        previewImageUrl: qrurl
+      },
+      {
+        type: 'image',
+        originalContentUrl: mapUrl,
+        previewImageUrl: mapUrl
+      }
+    ]);
+    alert("ส่งข้อความสำเร็จ!");
+    liff.closeWindow();
+  } catch (error) {
+    alert("เกิดข้อผิดพลาดในการส่งข้อความ: " + error);
+  }
+}
+
+// แสดงแจ้งเตือนระหว่างประมวลผล
+async function handleSend() {
+  Swal.fire({
+    title: 'กรุณารอสักครู่...',
+    text: 'กำลังสร้างแผนที่และส่งข้อมูล',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+  try {
+
+    const content = await settext();      // โหลดข้อมูล
+    await sendMapQr(content);// ส่งข้อความไป LINE
+    Swal.close();// ปิดแจ้งเตือนเมื่อเสร็จ
+
+    Swal.fire({
+      icon: 'success',
+      title: 'ส่งข้อมูลสำเร็จ!',
+      timer: 2000,
+      showConfirmButton: false
+    });
+
+  } catch (error) {
+    Swal.close(); // ปิด loading
+    Swal.fire({
+      icon: 'error',
+      title: 'เกิดข้อผิดพลาด',
+      text: error.message || 'ไม่สามารถส่งข้อมูลได้'
+    });
+  }
+}
+
+
+async function sendMessagebot(message) {
+  try {
+    // เรียกใช้ LIFF API เพื่อส่งข้อความ
+    await liff.sendMessages([
+      {
+        type: 'text',
+        text: message, // ข้อความที่ต้องการส่ง
+      }
+      // สามารถเพิ่มประเภทของข้อความและข้อมูลเพิ่มเติมตามต้องการ
+    ]);
+    alert("Message sent successfully!");
+    liff.closeWindow();
+  } catch (error) {
+    alert("Error occurred while trying to send message:", error);
+  }
+}
+
+//ตั้งค่าการแสดงผล
+function SelectedPage() {
+  var selectedPage = document.getElementById("selector").value;
+  switch (selectedPage) {
+    case "index":
+      document.getElementById("formbotip").style.display = "none";
+      document.getElementById("formidcard").style.display = "none";
+      document.getElementById("formreport").style.display = "block";
+      document.getElementById("formphone").style.display = "none";
+      document.getElementById("result").style.display = "none";
+      let datetimeInput = document.getElementById("datetime");
+      // Check if datetime input is empty, if yes, use current date
+      let datetime = datetimeInput.value ? new Date(datetimeInput.value) : new Date();
+      // รับค่าวันที่และเวลาในรูปแบบ ISO (YYYY-MM-DD)
+      datetimeInput.value = datetime.toISOString().split('T')[0];
+      break;
+
+    case "botip":
+      document.getElementById("formreport").style.display = "none";
+      document.getElementById("formidcard").style.display = "none";
+      document.getElementById("formbotip").style.display = "block";
+      document.getElementById("formphone").style.display = "none";
+      break;
+
+    case "phoneno":
+      document.getElementById("formreport").style.display = "none";
+      document.getElementById("formidcard").style.display = "none";
+      document.getElementById("formbotip").style.display = "none";
+      document.getElementById("formphone").style.display = "block";
+      break;
+
+    case "idcard":
+      document.getElementById("formreport").style.display = "none";
+      document.getElementById("formbotip").style.display = "none";
+      document.getElementById("formidcard").style.display = "block";
+      document.getElementById("formphone").style.display = "none";
+      break;
+
+    case "sanapp":
+      //window.location.href = 'https://san-all.web.app';
+      liff.openWindow({
+        url: 'https://san-np.web.app',
+        external: true
+      });
+      break;
+
+    default:
+      document.getElementById("formphone").style.display = "none";
+      document.getElementById("formbotip").style.display = "none";
+      document.getElementById("formidcard").style.display = "none";
+      document.getElementById("formreport").style.display = "block";
+      break;
+  }
+}
+
+
+function logOut() {
+  liff.logout()
+  window.location.reload()
+}
+
+async function getUserProfile() {
+  try {
+    const profile = await liff.getProfile();
+    const pictureUrl = document.getElementById("pictureUrl");
+    const userId = document.getElementById("userId");
+    const displayName = document.getElementById("displayName");
+    const statusMessage = document.getElementById("statusMessage");
+    const email = document.getElementById("email");
+
+    pictureUrl.src = profile.pictureUrl;
+    displayName.innerHTML = profile.displayName;
+    userId.innerHTML = profile.userId ?? '';
+    email.innerHTML = liff.getDecodedIDToken().email ?? '';
+    statusMessage.innerHTML = profile.statusMessage ?? '';
+  } catch (error) {
+    console.error("Error occurred while trying to get user profile:", error);
+  }
+}
+
+
+async function handleLogin() {
+  if (liff.isLoggedIn()) {
+    getUserProfile()
+    document.getElementById("btnLogin").style.display = "none";
+  } else if (!liff.isLoggedIn()) {
+    //alert("Login failed. Please try again.");
+    //liff.login({ redirectUri: "https://sankunakorn.github.io/sanbot-liff/" })
+    document.getElementById("btnLogin").style.display = "block";
+    document.getElementById("btnLogOut").style.display = "none";
+  }
+}
+
+
+async function initializeLiff() {
+  try {
+    // Initialize LIFF
+    await liff.init({ liffId: "2004593216-XbA9wj26" }).then(() => {
+      //withLoginOnExternalBrowser: true,
+      handleLogin();
+      liff.ready.then(() => {
+        if (liff.getOS() === "android") {
+          body.style.backgroundColor = "#98FB98";
+          os.innerHTML = 'OS:' + liff.getOS()
+        }
+        else if (liff.getOS() === "web") {
+          body.style.backgroundColor = "#99CCFF";
+          os.innerHTML = 'OS:' + liff.getOS()
+        }
+        else if (liff.getOS() === "ios") {
+          body.style.backgroundColor = "#F8F8FF";
+          os.innerHTML = 'OS:' + liff.getOS()
+        }
+        if (liff.isInClient() && userAgent.includes("Line")) {
+          //inapp.innerHTML = 'Line';
+        }
+        else if (!liff.isInClient()) {
+          //inapp.innerHTML = 'ExternalBrowser';
+        }
+      })
+    })
+  }
+  catch (error) {
+    // Handle initialization errors
+    alert('LIFF initialization failed', error);
+    //alert("LIFF initialization failed. Please try again later.");
+  }
+  SelectedPage()
+}
+
+
+
+
 

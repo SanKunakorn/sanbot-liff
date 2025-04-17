@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
+  <title>San BOT</title>
+
+  <style>
+  </style>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<header>
+  <div class="column">
+    <div class="row">
+      <div class="circle">
+        <img id="pictureUrl" style="width:100%;">
+      </div>
+      <h1>
+        <p class="text-overflow" id="displayName">
+          Loading...</p>
+      </h1>
+    </div>
+
+    <div class="row">
+      <span id="btnLogin" onclick="liff.login()" style="cursor: pointer;">Log In</span>
+      <span id="btnLogOut" onclick="logOut()" style="cursor: pointer;">Log Out</span>
+    </div>
+    <h2>
+      <!--<p id="userId"></p>-->
+      <!--<p id="statusMessage"></p>-->
+      <!-- <p id="email"></p>-->
+      <!--<p id="os"></p>-->
+      <!--<p id="inapp"></p>-->
+    </h2>
+  </div>
+</header>
+
+<body id="body">
+  <main>
+    <section>
+      <div class="row">
+        <select id="selector" onchange="SelectedPage()">
+          <option value="index">ตรวจที่เกิดเหตุ</option>
+          <option value="phoneno">เบอร์โทร</option>
+          <option value="botip">เช็ค IP Address</option>
+          <option value="idcard">ค้นหาจากเลขบัตร</option>
+          <option value="sanapp">San APP</option>
+        </select>
+      </div>
+    </section>
+
+    <!--=============================== รายงานปักหมุด =======================-->
+    <section id="formreport">
+      <div class="input-box">
+        <form id="mainform">
+          <div class="row">
+            <input type="date" id="datetime">
+            <input list="userlist" id="user" placeholder="เลือกผู้ปฏิบัติงาน">
+            <datalist id="userlist">
+              <option value="ชุดสืบสวน">
+              <option value="ร้อยเวร 20">
+              <option value="สายตรวจเขต">
+              <option value="สายตรวจตู้ยาม">
+            </datalist>
+          </div>
+          <label for="detail">รายละเอียด:</label>
+          <textarea id="detail" cols="100" rows="5"></textarea>
+          <label for="latlong">พิกัดแผนที่:</label>
+          <input type="text" id="latlong" placeholder="192.168.0.1" >
+        </form>
+
+        <div id="showResultmap" style="display: none;">
+          <h3>ตัวอย่าง:</h3>
+          <div id="resultMessage" style="white-space: pre-wrap;"></div>
+          <h3>QR-Code:</h3>
+          <img id="qrImage" width="200">
+          <h3><a id="mapLink" href="#" target="_blank">เปิดแผนที่</a></h3>
+          <h3>ภาพแผนที่:</h3>
+          <img id="map-img" width="200">
+        </div>
+
+      </div>
+      <div class="row">
+        <button id="btnsettext" onclick="showResult()">แสดงข้อมูล</button>
+        <button id="btnsendrp">ส่ง</button>
+        <button id="btnShare">แชร์</button>
+      </div>
+    </section>
+
+    <!--=============================== CHECK PHONE NO. =======================-->
+    <section id="formphone">
+      <div class="input-box">
+        <input type="text" id="txtphone" placeholder="0812345678">
+      </div>
+      <div class="row">
+        <button id="btncheckphone">ตรวจสอบ</button>
+      </div>
+    </section>
+
+    <!--=============================== CHECK IP ADDRESS =======================-->
+    <section id="formbotip">
+      <div class="input-box">
+        <input type="text" id="txtip" placeholder="192.168.0.1">
+      </div>
+      <div class="row">
+        <button id="btncheckip">ตรวจสอบ</button>
+      </div>
+    </section>
+
+
+    <!--=============================== ID CARD =======================-->
+    <section id="formidcard">
+      <div class="input-box">
+        <div class="row">
+          <input type="text" id="txtid" placeholder="เลขประจำตัวประชาชน" maxlength="13">
+          <p id="idcheck"></p>
+        </div>
+        <button id="btnidcheck">ตรวจสอบ</button>
+      </div>
+    </section>
+
+    <section id="result">
+      <div class="row">
+        <div id="statusMessage" style="white-space: pre-line;"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <h3>พัฒนาโดย San Kunakorn | งานสืบสวน สภ.นิคมพัฒนา ภ.จว.ระยอง</h3>
+  </footer>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.25.1/sdk.js"></script>
+  
+  <script>initializeLiff()</script>
+
+</body>
+</html>

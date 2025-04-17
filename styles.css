@@ -141,6 +141,11 @@ button {
   border: none;
   cursor: pointer;
   margin: 10px 0;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.02);
 }
 
 #selector {
@@ -193,9 +198,29 @@ button {
     text-overflow: ellipsis;
     /* เพิ่ม '...' ท้ายข้อความที่ถูกตัด */
   }
-
-  
-
-
-
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1e1e1e;
+    color: #f0f0f0;
+  }
+  section, header {
+    background: #2c2c2c;
+    border-color: #444;
+  }
+  input, textarea {
+    background: #3a3a3a;
+    color: #f0f0f0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
