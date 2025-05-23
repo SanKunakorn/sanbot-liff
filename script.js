@@ -432,6 +432,15 @@ function SelectedPage() {
       document.getElementById("formphone").style.display = "none";
       break;
 
+    case "timecal":
+      //window.location.href = 'https://san-all.web.app';
+      liff.openWindow({
+        url: '/timecaculate.html',
+        external: true
+      });
+      break;
+
+
     case "sanapp":
       //window.location.href = 'https://san-all.web.app';
       liff.openWindow({

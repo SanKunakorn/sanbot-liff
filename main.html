@@ -48,6 +48,7 @@
           <option value="phoneno">เบอร์โทร</option>
           <option value="botip">เช็ค IP Address</option>
           <option value="idcard">ค้นหาจากเลขบัตร</option>
+          <option value="timecal">คำนวณเวลากล้อง</option>
           <option value="sanapp">San APP</option>
         </select>
       </div>
@@ -70,7 +71,7 @@
           <label for="detail">รายละเอียด:</label>
           <textarea id="detail" cols="100" rows="5"></textarea>
           <label for="latlong">พิกัดแผนที่:</label>
-          <input type="text" id="latlong" placeholder="192.168.0.1" >
+          <input type="text" id="latlong" placeholder="12.8371109,101.1992687" >
         </form>
 
         <div id="showResultmap" style="display: none;">
@@ -133,7 +134,8 @@
   <footer>
     <h3>พัฒนาโดย San Kunakorn | งานสืบสวน สภ.นิคมพัฒนา ภ.จว.ระยอง</h3>
   </footer>
-  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.25.1/sdk.js"></script>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <!--<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.25.1/sdk.js"></script>-->
   
   <script>initializeLiff()</script>
 
