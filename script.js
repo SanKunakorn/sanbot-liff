@@ -433,10 +433,9 @@ function SelectedPage() {
       break;
 
     case "timecal":
-      //window.location.href = 'https://san-all.web.app';
       liff.openWindow({
-        url: '/timecaculate.html',
-        external: true
+        url: 'https://liff.line.me/2004593216-yj0q6ZgG',
+        external: false,
       });
       break;
 
