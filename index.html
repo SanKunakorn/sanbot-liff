@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <title>กำลังตรวจสอบสิทธิ์...</title>
@@ -13,9 +14,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-
-    .loading-container {
+      flex-direction: column;
       text-align: center;
     }
 
@@ -26,62 +25,95 @@
       width: 60px;
       height: 60px;
       animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
+      margin-bottom: 20px;
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     h3 {
       color: #555;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
+
 <body>
 
-  <div class="loading-container">
-    <div class="spinner"></div>
-    <h3>กำลังตรวจสอบสิทธิ์การเข้าใช้งาน...</h3>
-  </div>
+  <div class="spinner"></div>
+  <h3 id="statusText">กำลังโหลด...</h3>
+  <button id="retryBtn" style="display: none;">🔄 ลองอีกครั้ง</button>
+  <div id="dev-mode-message" style="color: red; text-align: center; margin-top: 20px;"></div>
+
 
   <script>
-    const liffId = "2004593216-XbA9wj26"; // ใส่ LIFF ID
+    const liffId = "2004593216-XbA9wj26"; // เปลี่ยนเป็น LIFF ID ของคุณ
     const scriptUrl = "https://script.google.com/macros/s/AKfycbyh2g8Qnbfvv70-sYVM7VRMzkfivB6BqLtnM3ajq1s248zbfECpJvcS8YTDONE4MbiY/exec";
 
     async function init() {
       try {
-        await liff.init({
-          liffId,
-          withLoginOnExternalBrowser: true, // ให้ dev เปิดจาก Chrome ได้
-        });
+        document.getElementById("statusText").textContent = "กำลังเข้าสู่ระบบ LINE...";
+
+        await liff.init({ liffId, withLoginOnExternalBrowser: true });
 
         if (!liff.isLoggedIn()) {
           liff.login();
           return;
         }
 
-        let uid;
+        document.getElementById("statusText").textContent = "กำลังตรวจสอบสิทธิ์...";
 
-        if (liff.isInClient()) {
-          // ✅ ใช้ใน LINE ปกติ
-          const profile = await liff.getProfile();
-          uid = profile.userId;
-          localStorage.setItem("line_uid", uid); // บันทึกไว้ใช้ dev
-        } else {
-          // 🧪 Dev Mode: ใช้จาก localStorage
-          uid = localStorage.getItem("line_uid");
-          if (!uid) {
-            alert("Dev Mode: ยังไม่มี UID ใน localStorage กรุณาเปิดจากใน LINE สักครั้งก่อน");
-            return;
+        // ดึง UID จาก sessionStorage หรือ LINE
+        let uid = sessionStorage.getItem("line_uid");
+
+        if (!uid) {
+          if (liff.isInClient()) {
+            const profile = await liff.getProfile();
+            uid = profile.userId;
+            sessionStorage.setItem("line_uid", uid);
+            localStorage.setItem("line_uid", uid); // สำหรับ dev mode
+          } else {
+            uid = localStorage.getItem("line_uid");
+            if (!uid) {
+              document.getElementById("dev-mode-message").textContent =
+                "โหมดทดสอบ: ยังไม่มี UID บันทึกในเครื่อง กรุณาเปิดจากแอป LINE อย่างน้อยหนึ่งครั้งก่อนใช้งานโหมดนี้";
+              return;
+            }
+
           }
         }
 
-        const allowedPermissions = ["All", "Normal"];
-        const url = `${scriptUrl}?uid=${uid}&permission=${allowedPermissions.join(",")}`;
+        const permissions = "All,Normal";
+        const url = `${scriptUrl}?uid=${uid}&permission=${encodeURIComponent(permissions)}`;
 
-        const response = await fetch(url);
+        // ตั้ง timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 วิ
+
+        const response = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
         if (!response.ok) throw new Error("Web App error");
 
         const result = await response.json();
@@ -94,11 +126,19 @@
 
       } catch (err) {
         console.error("Error:", err);
-        alert("เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์");
+        document.getElementById("statusText").textContent = "❌ ไม่สามารถโหลดข้อมูลได้";
+        document.getElementById("retryBtn").style.display = "inline-block";
+        alert("เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์ กรุณาลองใหม่");
       }
     }
+
+    // ปุ่ม "ลองอีกครั้ง"
+    document.getElementById("retryBtn").addEventListener("click", () => {
+      location.reload();
+    });
 
     window.onload = init;
   </script>
 </body>
+
 </html>
