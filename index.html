@@ -109,7 +109,7 @@
 
         // ตั้ง timeout
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 วิ
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 วิ
 
         const response = await fetch(url, { signal: controller.signal });
         clearTimeout(timeoutId);
